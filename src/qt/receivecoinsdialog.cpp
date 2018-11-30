@@ -1,5 +1,6 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2013-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -8,13 +9,14 @@
 
 #include "addressbookpage.h"
 #include "addresstablemodel.h"
-#include "ravenunits.h"
+#include "ritounits.h"
 #include "guiutil.h"
 #include "optionsmodel.h"
 #include "platformstyle.h"
 #include "receiverequestdialog.h"
 #include "recentrequeststablemodel.h"
 #include "walletmodel.h"
+#include "guiconstants.h"
 
 #include <QAction>
 #include <QCursor>
@@ -22,6 +24,7 @@
 #include <QMessageBox>
 #include <QScrollBar>
 #include <QTextDocument>
+#include <QGraphicsDropShadowEffect>
 
 ReceiveCoinsDialog::ReceiveCoinsDialog(const PlatformStyle *_platformStyle, QWidget *parent) :
     QDialog(parent),
@@ -65,6 +68,9 @@ ReceiveCoinsDialog::ReceiveCoinsDialog(const PlatformStyle *_platformStyle, QWid
     connect(copyAmountAction, SIGNAL(triggered()), this, SLOT(copyAmount()));
 
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clear()));
+
+    setupRequestFrame(platformStyle);
+    setupHistoryFrame(platformStyle);
 }
 
 void ReceiveCoinsDialog::setModel(WalletModel *_model)
@@ -119,6 +125,49 @@ void ReceiveCoinsDialog::reject()
 void ReceiveCoinsDialog::accept()
 {
     clear();
+}
+
+void ReceiveCoinsDialog::setupRequestFrame(const PlatformStyle *platformStyle)
+{
+    /** Update the coincontrol frame */
+    ui->frame2->setStyleSheet(QString(".QFrame {background-color: %1; border: none;}").arg(platformStyle->WidgetBackGroundColor().name()));
+    /** Create the shadow effects on the frames */
+
+    ui->frame2->setGraphicsEffect(GUIUtil::getShadowEffect());
+
+    ui->label_5->setStyleSheet(COLOR_LABEL_STRING);
+
+    ui->label_2->setStyleSheet(COLOR_LABEL_STRING);
+    ui->label_2->setFont(GUIUtil::getSubLabelFont());
+
+    ui->label->setStyleSheet(COLOR_LABEL_STRING);
+    ui->label->setFont(GUIUtil::getSubLabelFont());
+
+    ui->label_3->setStyleSheet(COLOR_LABEL_STRING);
+    ui->label_3->setFont(GUIUtil::getSubLabelFont());
+
+    ui->label_4->setStyleSheet(COLOR_LABEL_STRING);
+    ui->label_4->setFont(GUIUtil::getSubLabelFont());
+
+    ui->label_7->setStyleSheet(COLOR_LABEL_STRING);
+    ui->label_7->setFont(GUIUtil::getSubLabelFont());
+
+    ui->reuseAddress->setStyleSheet(COLOR_LABEL_STRING);
+}
+
+void ReceiveCoinsDialog::setupHistoryFrame(const PlatformStyle *platformStyle)
+{
+    /** Update the coincontrol frame */
+    ui->frame->setStyleSheet(QString(".QFrame {background-color: %1; border: none;}").arg(platformStyle->WidgetBackGroundColor().name()));
+    /** Create the shadow effects on the frames */
+
+    ui->frame->setGraphicsEffect(GUIUtil::getShadowEffect());
+
+    ui->label_6->setStyleSheet(COLOR_LABEL_STRING);
+
+    ui->recentRequestsView->setGraphicsEffect(GUIUtil::getShadowEffect());
+    ui->recentRequestsView->setStyleSheet(".QTableView {border: none;}");
+
 }
 
 void ReceiveCoinsDialog::updateDisplayUnit()
@@ -273,7 +322,7 @@ void ReceiveCoinsDialog::copyURI()
     }
 
     const RecentRequestsTableModel * const submodel = model->getRecentRequestsTableModel();
-    const QString uri = GUIUtil::formatRavenURI(submodel->entry(sel.row()).recipient);
+    const QString uri = GUIUtil::formatRitoURI(submodel->entry(sel.row()).recipient);
     GUIUtil::setClipboard(uri);
 }
 

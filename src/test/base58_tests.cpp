@@ -1,5 +1,6 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -11,7 +12,7 @@
 
 #include "key.h"
 #include "script/script.h"
-#include "test/test_raven.h"
+#include "test/test_rito.h"
 #include "uint256.h"
 #include "util.h"
 #include "utilstrencodings.h"
@@ -122,7 +123,7 @@ public:
 BOOST_AUTO_TEST_CASE(base58_keys_valid_parse)
 {
     UniValue tests = read_json(std::string(json_tests::base58_keys_valid, json_tests::base58_keys_valid + sizeof(json_tests::base58_keys_valid)));
-    CRavenSecret secret;
+    CRitoSecret secret;
     CTxDestination destination;
     SelectParams(CBaseChainParams::MAIN);
 
@@ -201,7 +202,7 @@ BOOST_AUTO_TEST_CASE(base58_keys_valid_gen)
             CKey key;
             key.Set(exp_payload.begin(), exp_payload.end(), isCompressed);
             assert(key.IsValid());
-            CRavenSecret secret;
+            CRitoSecret secret;
             secret.SetKey(key);
             BOOST_CHECK_MESSAGE(secret.ToString() == exp_base58string, "result mismatch: " + strTest);
         }
@@ -238,7 +239,7 @@ BOOST_AUTO_TEST_CASE(base58_keys_valid_gen)
 BOOST_AUTO_TEST_CASE(base58_keys_invalid)
 {
     UniValue tests = read_json(std::string(json_tests::base58_keys_invalid, json_tests::base58_keys_invalid + sizeof(json_tests::base58_keys_invalid))); // Negative testcases
-    CRavenSecret secret;
+    CRitoSecret secret;
     CTxDestination destination;
 
     for (unsigned int idx = 0; idx < tests.size(); idx++) {

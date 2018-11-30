@@ -1,15 +1,16 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #if defined(HAVE_CONFIG_H)
-#include "config/raven-config.h"
+#include "config/rito-config.h"
 #endif
 
 #include "optionsmodel.h"
 
-#include "ravenunits.h"
+#include "ritounits.h"
 #include "guiutil.h"
 
 #include "amount.h"
@@ -19,6 +20,7 @@
 #include "netbase.h"
 #include "txdb.h" // for -dbcache defaults
 #include "intro.h" 
+#include "platformstyle.h"
 
 #ifdef ENABLE_WALLET
 #include "wallet/wallet.h"
@@ -71,7 +73,7 @@ void OptionsModel::Init(bool resetSettings)
 
     // Display
     if (!settings.contains("nDisplayUnit"))
-        settings.setValue("nDisplayUnit", RavenUnits::RVN);
+        settings.setValue("nDisplayUnit", RitoUnits::RITO);
     nDisplayUnit = settings.value("nDisplayUnit").toInt();
 
     if (!settings.contains("strThirdPartyTxUrls"))
@@ -85,6 +87,10 @@ void OptionsModel::Init(bool resetSettings)
     if (!settings.contains("fCustomFeeFeatures"))
         settings.setValue("fCustomFeeFeatures", false);
     fCustomFeeFeatures = settings.value("fCustomFeeFeatures", false).toBool();
+
+    if (!settings.contains("fDarkModeEnabled"))
+        settings.setValue("fDarkModeEnabled", false);
+    fDarkModeEnabled = settings.value("fDarkModeEnabled", false).toBool();
 
     // These are shared with the core or have a command-line parameter
     // and we want command-line parameters to overwrite the GUI settings.
@@ -276,6 +282,8 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
             return settings.value("fListen");
         case CustomFeeFeatures:
             return fCustomFeeFeatures;
+        case DarkModeEnabled:
+            return fDarkModeEnabled;
         default:
             return QVariant();
         }
@@ -425,9 +433,13 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
             }
             break;
         case CustomFeeFeatures:
-            fCustomFeeFeatures = value.toBool();
-            settings.setValue("fCustomFeeFeatures", fCustomFeeFeatures);
-            Q_EMIT customFeeFeaturesChanged(fCustomFeeFeatures);
+                fCustomFeeFeatures = value.toBool();
+                settings.setValue("fCustomFeeFeatures", fCustomFeeFeatures);
+                Q_EMIT customFeeFeaturesChanged(fCustomFeeFeatures);
+                break;
+        case DarkModeEnabled:
+            fDarkModeEnabled = value.toBool();
+            settings.setValue("fDarkModeEnabled", fDarkModeEnabled);
             break;
         default:
             break;
@@ -491,7 +503,7 @@ void OptionsModel::checkAndMigrate()
     if (settingsVersion < CLIENT_VERSION)
     {
         // -dbcache was bumped from 100 to 300 in 0.13
-        // see https://github.com/RavenProject/Ravencoin/pull/8273
+        // see https://github.com/RitoProject/Ritocoin/pull/8273
         // force people to upgrade to the new value if they are using 100MB
         if (settingsVersion < 130000 && settings.contains("nDatabaseCache") && settings.value("nDatabaseCache").toLongLong() == 100)
             settings.setValue("nDatabaseCache", (qint64)nDefaultDbCache);

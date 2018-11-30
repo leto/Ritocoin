@@ -90,6 +90,11 @@ EXPECTED_HOLDER_NAMES = [
     "the Raven Core developers\n",
     "The Raven developers\n",
     "The LevelDB Authors\. All rights reserved\.\n",
+    "The Rito Core developers\n",
+    "The Rito Core developers \n",
+    "Rito Core Developers\n",
+    "the Rito Core developers\n",
+    "The Rito developers\n",
     "BitPay Inc\.\n",
     "BitPay, Inc\.\n",
     "University of Illinois at Urbana-Champaign\.\n",
@@ -341,7 +346,7 @@ def write_file_lines(filename, file_lines):
 COPYRIGHT = 'Copyright \(c\)'
 YEAR = "20[0-9][0-9]"
 YEAR_RANGE = '(%s)(-%s)?' % (YEAR, YEAR)
-HOLDER = 'The Raven Core developers'
+HOLDER = 'The Rito Core developers'
 UPDATEABLE_LINE_COMPILED = re.compile(' '.join([COPYRIGHT, YEAR_RANGE, HOLDER]))
 
 def get_updatable_copyright_line(file_lines):
@@ -409,28 +414,28 @@ def exec_update_header_year(base_directory):
 ################################################################################
 
 UPDATE_USAGE = """
-Updates all the copyright headers of "The Raven Core developers" which were
+Updates all the copyright headers of "The Rito Core developers" which were
 changed in a year more recent than is listed. For example:
 
 // Copyright (c) <firstYear>-<lastYear> The Bitcoin Core developers
-// Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2017 The Rito Core developers
 
 will be updated to:
 
 // Copyright (c) <firstYear>-<lastModifiedYear> The Bitcoin Core developers
-// Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2017 The Rito Core developers
 
 where <lastModifiedYear> is obtained from the 'git log' history.
 
 This subcommand also handles copyright headers that have only a single year. In those cases:
 
 // Copyright (c) <year> The Bitcoin Core developers
-// Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2017 The Rito Core developers
 
 will be updated to:
 
 // Copyright (c) <year>-<lastModifiedYear> The Bitcoin Core developers
-// Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2017 The Rito Core developers
 
 where the update is appropriate.
 
@@ -465,6 +470,7 @@ def get_header_lines(header, start_year, end_year):
 CPP_HEADER = '''
 // Copyright (c) %s The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 '''
@@ -475,6 +481,7 @@ def get_cpp_header_lines_to_insert(start_year, end_year):
 PYTHON_HEADER = '''
 # Copyright (c) %s The Bitcoin Core developers
 # Copyright (c) 2017 The Raven Core developers
+# Copyright (c) 2018 The Rito Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 '''
@@ -541,7 +548,7 @@ def exec_insert_header(filename, style):
 ################################################################################
 
 INSERT_USAGE = """
-Inserts a copyright header for "The Raven Core developers" at the top of the
+Inserts a copyright header for "The Rito Core developers" at the top of the
 file in either Python or C++ style as determined by the file extension. If the
 file is a Python file and it has a '#!' starting the first line, the header is
 inserted in the line below it.
@@ -555,7 +562,7 @@ where <year_introduced> is according to the 'git log' history. If
 
 "<current_year>"
 
-If the file already has a copyright for "The Raven Core developers", the
+If the file already has a copyright for "The Rito Core developers", the
 script will exit.
 
 Usage:
@@ -587,7 +594,7 @@ def insert_cmd(argv):
 ################################################################################
 
 USAGE = """
-copyright_header.py - utilities for managing copyright headers of 'The Raven
+copyright_header.py - utilities for managing copyright headers of 'The Rito 
 Core developers' in repository source files.
 
 Usage:

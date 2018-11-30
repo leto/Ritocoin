@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
-# Copyright (c) 2016 The Bitcoin Core developers
-# Copyright (c) 2017-2018 The Raven Core developers
+# Copyright (c) 2018 The Bitcoin Core developers
+# Copyright (c) 2017 The Raven Core developers
+# Copyright (c) 2018 The Rito Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test Wallet encryption"""
 
 import time
 
-from test_framework.test_framework import RavenTestFramework
+from test_framework.test_framework import RitoTestFramework
 from test_framework.util import (
     assert_equal,
     assert_raises_rpc_error,
 )
 
-class WalletEncryptionTest(RavenTestFramework):
+class WalletEncryptionTest(RitoTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 1

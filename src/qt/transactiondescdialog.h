@@ -1,10 +1,11 @@
-// Copyright (c) 2011-2014 The Bitcoin Core developers
+// Copyright (c) 2011-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_QT_TRANSACTIONDESCDIALOG_H
-#define RAVEN_QT_TRANSACTIONDESCDIALOG_H
+#ifndef RITO_QT_TRANSACTIONDESCDIALOG_H
+#define RITO_QT_TRANSACTIONDESCDIALOG_H
 
 #include <QDialog>
 
@@ -29,4 +30,4 @@ private:
     Ui::TransactionDescDialog *ui;
 };
 
-#endif // RAVEN_QT_TRANSACTIONDESCDIALOG_H
+#endif // RITO_QT_TRANSACTIONDESCDIALOG_H

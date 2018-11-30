@@ -1,10 +1,11 @@
-// Copyright (c) 2011-2015 The Bitcoin Core developers
+// Copyright (c) 2013-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_QT_TRAFFICGRAPHWIDGET_H
-#define RAVEN_QT_TRAFFICGRAPHWIDGET_H
+#ifndef RITO_QT_TRAFFICGRAPHWIDGET_H
+#define RITO_QT_TRAFFICGRAPHWIDGET_H
 
 #include <QWidget>
 #include <QQueue>
@@ -46,4 +47,4 @@ private:
     ClientModel *clientModel;
 };
 
-#endif // RAVEN_QT_TRAFFICGRAPHWIDGET_H
+#endif // RITO_QT_TRAFFICGRAPHWIDGET_H

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-# Copyright (c) 2014 Wladimir J. van der Laan
+# Copyright (c) 2014-2018 The Bitcoin Core developers
+# Copyright (c) 2017 The Raven Core developers
+# Copyright (c) 2018 The Rito Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 '''
@@ -26,7 +28,7 @@ import xml.etree.ElementTree as ET
 # Name of transifex tool
 TX = 'tx'
 # Name of source language file
-SOURCE_LANG = 'raven_en.ts'
+SOURCE_LANG = 'rito_en.ts'
 # Directory with locale files
 LOCALE_DIR = 'src/qt/locale'
 # Minimum number of messages for translation to be considered at all

@@ -1,10 +1,11 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_QT_ASSETRECORD_H
-#define RAVEN_QT_ASSETRECORD_H
+#ifndef RITO_QT_ASSETRECORD_H
+#define RITO_QT_ASSETRECORD_H
 
 #include "math.h"
 #include "amount.h"
@@ -27,14 +28,14 @@ public:
     {
     }
 
-    std::string formattedQuantity() {
+    std::string formattedQuantity() const {
         bool sign = quantity < 0;
         int64_t n_abs = (sign ? -quantity : quantity);
         int64_t quotient = n_abs / COIN;
         int64_t remainder = n_abs % COIN;
         remainder = remainder / pow(10, 8 - units);
 
-        if (units == 0 && remainder == 0) {
+        if (remainder == 0) {
             return strprintf("%s%d", sign ? "-" : "", quotient);
         }
         else {
@@ -52,4 +53,4 @@ public:
 
 };
 
-#endif // RAVEN_QT_ASSETRECORD_H
+#endif // RITO_QT_ASSETRECORD_H

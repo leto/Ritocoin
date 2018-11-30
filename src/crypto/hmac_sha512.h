@@ -1,10 +1,11 @@
-// Copyright (c) 2014 The Bitcoin Core developers
+// Copyright (c) 2014-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_CRYPTO_HMAC_SHA512_H
-#define RAVEN_CRYPTO_HMAC_SHA512_H
+#ifndef RITO_CRYPTO_HMAC_SHA512_H
+#define RITO_CRYPTO_HMAC_SHA512_H
 
 #include "crypto/sha512.h"
 
@@ -30,4 +31,4 @@ public:
     void Finalize(unsigned char hash[OUTPUT_SIZE]);
 };
 
-#endif // RAVEN_CRYPTO_HMAC_SHA512_H
+#endif // RITO_CRYPTO_HMAC_SHA512_H

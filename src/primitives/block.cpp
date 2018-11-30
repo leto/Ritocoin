@@ -1,19 +1,19 @@
-// Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
+// Copyright (c) 2014-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "primitives/block.h"
 
-#include "hash.h"
+#include "algo/hashx21s.h"
 #include "tinyformat.h"
 #include "utilstrencodings.h"
 #include "crypto/common.h"
 
 uint256 CBlockHeader::GetHash() const
 {
-    return HashX16R(BEGIN(nVersion), END(nNonce), hashPrevBlock);
+    return HashX21S(BEGIN(nVersion), END(nNonce), hashPrevBlock);
 }
 
 std::string CBlock::ToString() const

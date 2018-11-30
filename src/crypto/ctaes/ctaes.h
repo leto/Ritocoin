@@ -1,7 +1,9 @@
+// Copyright (c) 2016 The Bitcoin Core developers
+// Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
  /*********************************************************************
- * Copyright (c) 2016 Pieter Wuille                                   *
- * Distributed under the MIT software license, see the accompanying   *
- * file COPYING or http://www.opensource.org/licenses/mit-license.php.*
  **********************************************************************/
 
 #ifndef _CTAES_H_

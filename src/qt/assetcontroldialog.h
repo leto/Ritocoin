@@ -1,10 +1,11 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_QT_ASSETCONTROLDIALOG_H
-#define RAVEN_QT_ASSETCONTROLDIALOG_H
+#ifndef RITO_QT_ASSETCONTROLDIALOG_H
+#define RITO_QT_ASSETCONTROLDIALOG_H
 
 #include "amount.h"
 
@@ -17,10 +18,15 @@
 #include <QString>
 #include <QTreeWidgetItem>
 
+
 class PlatformStyle;
 class WalletModel;
 
 class CCoinControl;
+
+class QStringListModel;
+class QSortFilterProxyModel;
+class QCompleter;
 
 namespace Ui {
     class AssetControlDialog;
@@ -58,6 +64,10 @@ public:
     static CCoinControl *assetControl;
     static bool fSubtractFeeFromAmount;
     bool fOnStartUp;
+
+    QStringListModel* stringModel;
+    QSortFilterProxyModel* proxy;
+    QCompleter* completer;
 
 private:
     Ui::AssetControlDialog *ui;
@@ -116,4 +126,4 @@ private Q_SLOTS:
     void onAssetSelected(QString name);
 };
 
-#endif // RAVEN_QT_ASSETCONTROLDIALOG_H
+#endif // RITO_QT_ASSETCONTROLDIALOG_H

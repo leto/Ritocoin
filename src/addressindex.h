@@ -1,10 +1,11 @@
-// Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2015 The Bitcoin Core developers
+// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_ADDRESSINDEX_H
-#define RAVEN_ADDRESSINDEX_H
+#ifndef RITO_ADDRESSINDEX_H
+#define RITO_ADDRESSINDEX_H
 
 #include "uint256.h"
 #include "amount.h"
@@ -292,4 +293,4 @@ struct CMempoolAddressDeltaKeyCompare
     }
 };
 
-#endif // RAVEN_ADDRESSINDEX_H
+#endif // RITO_ADDRESSINDEX_H

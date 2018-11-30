@@ -1,5 +1,6 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -12,7 +13,10 @@
 #include "optionsmodel.h"
 #include "platformstyle.h"
 #include "walletmodel.h"
+#include "guiconstants.h"
+#include "darkstyle.h"
 
+#include <QGraphicsDropShadowEffect>
 #include <QApplication>
 #include <QClipboard>
 
@@ -38,9 +42,9 @@ SendCoinsEntry::SendCoinsEntry(const PlatformStyle *_platformStyle, QWidget *par
     ui->addAsLabel->setPlaceholderText(tr("Enter a label for this address to add it to your address book"));
 #endif
 
-    // normal raven address field
+    // normal rito address field
     GUIUtil::setupAddressWidget(ui->payTo, this);
-    // just a label for displaying raven address(es)
+    // just a label for displaying rito address(es)
     ui->payTo_is->setFont(GUIUtil::fixedPitchFont());
 
     // Connect signals
@@ -49,6 +53,24 @@ SendCoinsEntry::SendCoinsEntry(const PlatformStyle *_platformStyle, QWidget *par
     connect(ui->deleteButton, SIGNAL(clicked()), this, SLOT(deleteClicked()));
     connect(ui->deleteButton_is, SIGNAL(clicked()), this, SLOT(deleteClicked()));
     connect(ui->deleteButton_s, SIGNAL(clicked()), this, SLOT(deleteClicked()));
+
+    this->setStyleSheet(QString(".SendCoinsEntry {background-color: %1; padding-top: 10px; padding-right: 30px; border: none;}").arg(platformStyle->SendEntriesBackGroundColor().name()));
+
+    this->setGraphicsEffect(GUIUtil::getShadowEffect());
+
+    ui->payToLabel->setStyleSheet(COLOR_LABEL_STRING);
+    ui->payToLabel->setFont(GUIUtil::getSubLabelFont());
+
+    ui->labellLabel->setStyleSheet(COLOR_LABEL_STRING);
+    ui->labellLabel->setFont(GUIUtil::getSubLabelFont());
+
+    ui->amountLabel->setStyleSheet(COLOR_LABEL_STRING);
+    ui->amountLabel->setFont(GUIUtil::getSubLabelFont());
+
+    ui->messageLabel->setStyleSheet(COLOR_LABEL_STRING);
+    ui->messageLabel->setFont(GUIUtil::getSubLabelFont());
+
+    ui->checkboxSubtractFeeFromAmount->setStyleSheet(COLOR_LABEL_STRING);
 }
 
 SendCoinsEntry::~SendCoinsEntry()
@@ -109,7 +131,7 @@ void SendCoinsEntry::clear()
     ui->memoTextLabel_s->clear();
     ui->payAmount_s->clear();
 
-    // update the display unit, to not use the default ("RVN")
+    // update the display unit, to not use the default ("RITO")
     updateDisplayUnit();
 }
 

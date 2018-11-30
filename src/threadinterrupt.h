@@ -1,10 +1,11 @@
-// Copyright (c) 2016 The Bitcoin Core developers
+// Copyright (c) 2016-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_THREADINTERRUPT_H
-#define RAVEN_THREADINTERRUPT_H
+#ifndef RITO_THREADINTERRUPT_H
+#define RITO_THREADINTERRUPT_H
 
 #include <atomic>
 #include <chrono>
@@ -32,4 +33,4 @@ private:
     std::atomic<bool> flag;
 };
 
-#endif //RAVEN_THREADINTERRUPT_H
+#endif //RITO_THREADINTERRUPT_H

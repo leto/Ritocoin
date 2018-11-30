@@ -1,10 +1,11 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2015-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_WALLET_COINCONTROL_H
-#define RAVEN_WALLET_COINCONTROL_H
+#ifndef RITO_WALLET_COINCONTROL_H
+#define RITO_WALLET_COINCONTROL_H
 
 #include "policy/feerate.h"
 #include "policy/fees.h"
@@ -33,10 +34,10 @@ public:
     //! Fee estimation mode to control arguments to estimateSmartFee
     FeeEstimateMode m_fee_mode;
 
-    /** RVN START */
+    /** RITO START */
     //! Name of the asset that is selected, used when sending assets with coincontrol
     std::string strAssetSelected;
-    /** RVN END */
+    /** RITO END */
 
     CCoinControl()
     {
@@ -125,4 +126,4 @@ private:
     std::set<COutPoint> setAssetsSelected;
 };
 
-#endif // RAVEN_WALLET_COINCONTROL_H
+#endif // RITO_WALLET_COINCONTROL_H

@@ -1,10 +1,11 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2012-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_QT_RPCCONSOLE_H
-#define RAVEN_QT_RPCCONSOLE_H
+#ifndef RITO_QT_RPCCONSOLE_H
+#define RITO_QT_RPCCONSOLE_H
 
 #include "guiutil.h"
 #include "peertablemodel.h"
@@ -28,7 +29,7 @@ class QMenu;
 class QItemSelection;
 QT_END_NAMESPACE
 
-/** Local Raven RPC console. */
+/** Local Rito RPC console. */
 class RPCConsole: public QWidget
 {
     Q_OBJECT
@@ -157,4 +158,4 @@ private:
     void updateNetworkState();
 };
 
-#endif // RAVEN_QT_RPCCONSOLE_H
+#endif // RITO_QT_RPCCONSOLE_H

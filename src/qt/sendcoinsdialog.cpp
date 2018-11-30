@@ -1,5 +1,6 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -7,7 +8,7 @@
 #include "ui_sendcoinsdialog.h"
 
 #include "addresstablemodel.h"
-#include "ravenunits.h"
+#include "ritounits.h"
 #include "clientmodel.h"
 #include "coincontroldialog.h"
 #include "guiutil.h"
@@ -15,6 +16,7 @@
 #include "platformstyle.h"
 #include "sendcoinsentry.h"
 #include "walletmodel.h"
+#include "guiconstants.h"
 
 #include "base58.h"
 #include "chainparams.h"
@@ -25,6 +27,7 @@
 #include "policy/fees.h"
 #include "wallet/fees.h"
 
+#include <QGraphicsDropShadowEffect>
 #include <QFontMetrics>
 #include <QMessageBox>
 #include <QScrollBar>
@@ -108,6 +111,11 @@ SendCoinsDialog::SendCoinsDialog(const PlatformStyle *_platformStyle, QWidget *p
     ui->customFee->setValue(settings.value("nTransactionFee").toLongLong());
     ui->checkBoxMinimumFee->setChecked(settings.value("fPayOnlyMinFee").toBool());
     minimizeFeeSection(settings.value("fFeeSectionMinimized").toBool());
+
+    // Setup the coin control visuals and labels
+    setupCoinControl(platformStyle);
+    setupScrollView(platformStyle);
+    setupFeeControl(platformStyle);
 }
 
 void SendCoinsDialog::setClientModel(ClientModel *_clientModel)
@@ -197,6 +205,76 @@ SendCoinsDialog::~SendCoinsDialog()
     delete ui;
 }
 
+void SendCoinsDialog::setupCoinControl(const PlatformStyle *platformStyle)
+{
+    /** Update the coincontrol frame */
+    ui->frameCoinControl->setStyleSheet(QString(".QFrame {background-color: %1; padding-top: 10px; padding-right: 5px; border: none;}").arg(platformStyle->WidgetBackGroundColor().name()));
+    ui->widgetCoinControl->setStyleSheet(".QWidget {background-color: transparent;}");
+    /** Create the shadow effects on the frames */
+
+    ui->frameCoinControl->setGraphicsEffect(GUIUtil::getShadowEffect());
+
+    ui->labelCoinControlFeatures->setStyleSheet(COLOR_LABEL_STRING);
+    ui->labelCoinControlFeatures->setFont(GUIUtil::getTopLabelFont());
+
+    ui->labelCoinControlQuantityText->setStyleSheet(COLOR_LABEL_STRING);
+    ui->labelCoinControlQuantityText->setFont(GUIUtil::getSubLabelFont());
+
+    ui->labelCoinControlAmountText->setStyleSheet(COLOR_LABEL_STRING);
+    ui->labelCoinControlAmountText->setFont(GUIUtil::getSubLabelFont());
+
+    ui->labelCoinControlFeeText->setStyleSheet(COLOR_LABEL_STRING);
+    ui->labelCoinControlFeeText->setFont(GUIUtil::getSubLabelFont());
+
+    ui->labelCoinControlAfterFeeText->setStyleSheet(COLOR_LABEL_STRING);
+    ui->labelCoinControlAfterFeeText->setFont(GUIUtil::getSubLabelFont());
+
+    ui->labelCoinControlBytesText->setStyleSheet(COLOR_LABEL_STRING);
+    ui->labelCoinControlBytesText->setFont(GUIUtil::getSubLabelFont());
+
+    ui->labelCoinControlLowOutputText->setStyleSheet(COLOR_LABEL_STRING);
+    ui->labelCoinControlLowOutputText->setFont(GUIUtil::getSubLabelFont());
+
+    ui->labelCoinControlChangeText->setStyleSheet(COLOR_LABEL_STRING);
+    ui->labelCoinControlChangeText->setFont(GUIUtil::getSubLabelFont());
+
+    // Align the other labels next to the input buttons to the text in the same height
+    ui->labelCoinControlAutomaticallySelected->setStyleSheet(COLOR_LABEL_STRING);
+
+    // Align the Custom change address checkbox
+    ui->checkBoxCoinControlChange->setStyleSheet(COLOR_LABEL_STRING);
+}
+
+void SendCoinsDialog::setupScrollView(const PlatformStyle *platformStyle)
+{
+    /** Update the scrollview*/
+    ui->scrollArea->setStyleSheet(QString(".QScrollArea{background-color: %1; border: none}").arg(platformStyle->WidgetBackGroundColor().name()));
+    ui->scrollArea->setGraphicsEffect(GUIUtil::getShadowEffect());
+
+    // Add some spacing so we can see the whole card
+    ui->entries->setContentsMargins(10,10,20,0);
+    ui->scrollAreaWidgetContents->setStyleSheet(QString(".QWidget{ background-color: %1;}").arg(platformStyle->WidgetBackGroundColor().name()));
+}
+
+void SendCoinsDialog::setupFeeControl(const PlatformStyle *platformStyle)
+{
+    /** Update the coincontrol frame */
+    ui->frameFee->setStyleSheet(QString(".QFrame {background-color: %1; padding-top: 10px; padding-right: 5px; border: none;}").arg(platformStyle->WidgetBackGroundColor().name()));
+    /** Create the shadow effects on the frames */
+
+    ui->frameFee->setGraphicsEffect(GUIUtil::getShadowEffect());
+
+    ui->labelFeeHeadline->setStyleSheet(COLOR_LABEL_STRING);
+    ui->labelFeeHeadline->setFont(GUIUtil::getSubLabelFont());
+
+    ui->labelSmartFee3->setStyleSheet(COLOR_LABEL_STRING);
+    ui->labelCustomPerKilobyte->setStyleSheet(COLOR_LABEL_STRING);
+    ui->radioSmartFee->setStyleSheet(COLOR_LABEL_STRING);
+    ui->radioCustomFee->setStyleSheet(COLOR_LABEL_STRING);
+    ui->checkBoxMinimumFee->setStyleSheet(COLOR_LABEL_STRING);
+
+}
+
 void SendCoinsDialog::on_sendButton_clicked()
 {
     if(!model || !model->getOptionsModel())
@@ -250,7 +328,7 @@ void SendCoinsDialog::on_sendButton_clicked()
 
     // process prepareStatus and on error generate message shown to user
     processSendCoinsReturn(prepareStatus,
-        RavenUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), currentTransaction.getTransactionFee()));
+        RitoUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), currentTransaction.getTransactionFee()));
 
     if(prepareStatus.status != WalletModel::OK) {
         fNewRecipientAllowed = true;
@@ -264,7 +342,7 @@ void SendCoinsDialog::on_sendButton_clicked()
     for (const SendCoinsRecipient &rcp : currentTransaction.getRecipients())
     {
         // generate bold amount string
-        QString amount = "<b>" + RavenUnits::formatHtmlWithUnit(model->getOptionsModel()->getDisplayUnit(), rcp.amount);
+        QString amount = "<b>" + RitoUnits::formatHtmlWithUnit(model->getOptionsModel()->getDisplayUnit(), rcp.amount);
         amount.append("</b>");
         // generate monospace address string
         QString address = "<span style='font-family: monospace;'>" + rcp.address;
@@ -303,7 +381,7 @@ void SendCoinsDialog::on_sendButton_clicked()
     {
         // append fee string if a fee is required
         questionString.append("<hr /><span style='color:#aa0000;'>");
-        questionString.append(RavenUnits::formatHtmlWithUnit(model->getOptionsModel()->getDisplayUnit(), txFee));
+        questionString.append(RitoUnits::formatHtmlWithUnit(model->getOptionsModel()->getDisplayUnit(), txFee));
         questionString.append("</span> ");
         questionString.append(tr("added as transaction fee"));
 
@@ -315,13 +393,13 @@ void SendCoinsDialog::on_sendButton_clicked()
     questionString.append("<hr />");
     CAmount totalAmount = currentTransaction.getTotalTransactionAmount() + txFee;
     QStringList alternativeUnits;
-    for (RavenUnits::Unit u : RavenUnits::availableUnits())
+    for (RitoUnits::Unit u : RitoUnits::availableUnits())
     {
         if(u != model->getOptionsModel()->getDisplayUnit())
-            alternativeUnits.append(RavenUnits::formatHtmlWithUnit(u, totalAmount));
+            alternativeUnits.append(RitoUnits::formatHtmlWithUnit(u, totalAmount));
     }
     questionString.append(tr("Total Amount %1")
-        .arg(RavenUnits::formatHtmlWithUnit(model->getOptionsModel()->getDisplayUnit(), totalAmount)));
+        .arg(RitoUnits::formatHtmlWithUnit(model->getOptionsModel()->getDisplayUnit(), totalAmount)));
     questionString.append(QString("<span style='font-size:10pt;font-weight:normal;'><br />(=%2)</span>")
         .arg(alternativeUnits.join(" " + tr("or") + "<br />")));
 
@@ -499,7 +577,7 @@ void SendCoinsDialog::setBalance(const CAmount& balance, const CAmount& unconfir
 
     if(model && model->getOptionsModel())
     {
-        ui->labelBalance->setText(RavenUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), balance));
+        ui->labelBalance->setText(RitoUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), balance));
     }
 }
 
@@ -546,7 +624,7 @@ void SendCoinsDialog::processSendCoinsReturn(const WalletModel::SendCoinsReturn 
         msgParams.second = CClientUIInterface::MSG_ERROR;
         break;
     case WalletModel::AbsurdFee:
-        msgParams.first = tr("A fee higher than %1 is considered an absurdly high fee.").arg(RavenUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), maxTxFee));
+        msgParams.first = tr("A fee higher than %1 is considered an absurdly high fee.").arg(RitoUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), maxTxFee));
         break;
     case WalletModel::PaymentRequestExpired:
         msgParams.first = tr("Payment request expired.");
@@ -608,7 +686,7 @@ void SendCoinsDialog::updateFeeMinimizedLabel()
     if (ui->radioSmartFee->isChecked())
         ui->labelFeeMinimized->setText(ui->labelSmartFee->text());
     else {
-        ui->labelFeeMinimized->setText(RavenUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), ui->customFee->value()) + "/kB");
+        ui->labelFeeMinimized->setText(RitoUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), ui->customFee->value()) + "/kB");
     }
 }
 
@@ -616,7 +694,7 @@ void SendCoinsDialog::updateMinFeeLabel()
 {
     if (model && model->getOptionsModel())
         ui->checkBoxMinimumFee->setText(tr("Pay only the required fee of %1").arg(
-            RavenUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), GetRequiredFee(1000)) + "/kB")
+            RitoUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), GetRequiredFee(1000)) + "/kB")
         );
 }
 
@@ -643,7 +721,7 @@ void SendCoinsDialog::updateSmartFeeLabel()
     FeeCalculation feeCalc;
     CFeeRate feeRate = CFeeRate(GetMinimumFee(1000, coin_control, ::mempool, ::feeEstimator, &feeCalc));
 
-    ui->labelSmartFee->setText(RavenUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), feeRate.GetFeePerK()) + "/kB");
+    ui->labelSmartFee->setText(RitoUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), feeRate.GetFeePerK()) + "/kB");
 
     if (feeCalc.reason == FeeReason::FALLBACK) {
         ui->labelSmartFee2->show(); // (Smart fee not initialized yet. This usually takes a few blocks...)
@@ -758,7 +836,7 @@ void SendCoinsDialog::coinControlChangeEdited(const QString& text)
         }
         else if (!IsValidDestination(dest)) // Invalid address
         {
-            ui->labelCoinControlChangeLabel->setText(tr("Warning: Invalid Raven address"));
+            ui->labelCoinControlChangeLabel->setText(tr("Warning: Invalid Rito address"));
         }
         else // Valid address
         {

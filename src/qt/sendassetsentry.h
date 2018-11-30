@@ -1,10 +1,11 @@
-// Copyright (c) 2011-2015 The Bitcoin Core developers
+// Copyright (c) 2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_QT_SENDASSETSENTRY_H
-#define RAVEN_QT_SENDASSETSENTRY_H
+#ifndef RITO_QT_SENDASSETSENTRY_H
+#define RITO_QT_SENDASSETSENTRY_H
 
 #include "walletmodel.h"
 
@@ -12,13 +13,16 @@
 
 class WalletModel;
 class PlatformStyle;
+class QStringListModel;
+class QSortFilterProxyModel;
+class QCompleter;
 
 namespace Ui {
     class SendAssetsEntry;
 }
 
 /**
- * A single entry in the dialog for sending ravens.
+ * A single entry in the dialog for sending ritos.
  * Stacked widget, with different UIs for payment requests
  * with a strong payee identity.
  */
@@ -49,12 +53,17 @@ public:
     QWidget *setupTabChain(QWidget *prev);
 
     void setFocus();
+    void setFocusAssetListBox();
 
     bool fUsingAssetControl;
     bool fShowAdministratorList;
 
     void refreshAssetList();
     void switchAdministratorList(bool fSwitchStatus = true);
+
+    QStringListModel* stringModel;
+    QSortFilterProxyModel* proxy;
+    QCompleter* completer;
 
 
 public Q_SLOTS:
@@ -82,4 +91,4 @@ private:
     bool updateLabel(const QString &address);
 };
 
-#endif // RAVEN_QT_SENDASSETSENTRY_H
+#endif // RITO_QT_SENDASSETSENTRY_H

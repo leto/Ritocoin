@@ -1,5 +1,6 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -7,7 +8,7 @@
 #include "ui_assetcontroldialog.h"
 
 #include "addresstablemodel.h"
-#include "ravenunits.h"
+#include "ritounits.h"
 #include "guiutil.h"
 #include "optionsmodel.h"
 #include "platformstyle.h"
@@ -32,6 +33,10 @@
 #include <QString>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QStringListModel>
+#include <QSortFilterProxyModel>
+#include <QCompleter>
+#include <QLineEdit>
 
 QList<CAmount> AssetControlDialog::payAmounts;
 CCoinControl* AssetControlDialog::assetControl = new CCoinControl();
@@ -126,7 +131,7 @@ AssetControlDialog::AssetControlDialog(const PlatformStyle *_platformStyle, QWid
     connect(ui->pushButtonSelectAll, SIGNAL(clicked()), this, SLOT(buttonSelectAllClicked()));
 
     // change coin control first column label due Qt4 bug.
-    // see https://github.com/RavenProject/Ravencoin/issues/5716
+    // see https://github.com/RitoProject/Ritocoin/issues/5716
     ui->treeWidget->headerItem()->setText(COLUMN_CHECKBOX, QString());
 
     ui->treeWidget->setColumnWidth(COLUMN_CHECKBOX, 84);
@@ -151,6 +156,22 @@ AssetControlDialog::AssetControlDialog(const PlatformStyle *_platformStyle, QWid
     // Add the assets into the dropdown menu
     connect(ui->viewAdministrator, SIGNAL(clicked()), this, SLOT(viewAdministratorClicked()));
     connect(ui->assetList, SIGNAL(currentIndexChanged(QString)), this, SLOT(onAssetSelected(QString)));
+
+    /** Setup the asset list combobox */
+    stringModel = new QStringListModel;
+
+    proxy = new QSortFilterProxyModel;
+    proxy->setSourceModel(stringModel);
+    proxy->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+    ui->assetList->setModel(proxy);
+    ui->assetList->setEditable(true);
+    ui->assetList->lineEdit()->setPlaceholderText("Select an asset");
+
+    completer = new QCompleter(proxy,this);
+    completer->setCompletionMode(QCompleter::PopupCompletion);
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+    ui->assetList->setCompleter(completer);
 }
 
 AssetControlDialog::~AssetControlDialog()
@@ -246,7 +267,7 @@ void AssetControlDialog::showMenu(const QPoint &point)
 // context menu action: copy amount
 void AssetControlDialog::copyAmount()
 {
-    GUIUtil::setClipboard(RavenUnits::removeSpaces(contextMenuItem->text(COLUMN_AMOUNT)));
+    GUIUtil::setClipboard(RitoUnits::removeSpaces(contextMenuItem->text(COLUMN_AMOUNT)));
 }
 
 // context menu action: copy label
@@ -539,7 +560,7 @@ void AssetControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
     }
 
     // actually update labels
-    int nDisplayUnit = RavenUnits::RVN;
+    int nDisplayUnit = RitoUnits::RITO;
     if (model && model->getOptionsModel())
         nDisplayUnit = model->getOptionsModel()->getDisplayUnit();
 
@@ -559,12 +580,12 @@ void AssetControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
 
     // stats
     l1->setText(QString::number(nQuantity));                                 // Quantity
-    l2->setText(RavenUnits::formatWithCustomName(QString::fromStdString(strAssetName), nAssetAmount));        // Amount
-    l3->setText(RavenUnits::formatWithUnit(nDisplayUnit, nPayFee));        // Fee
-    l4->setText(RavenUnits::formatWithUnit(nDisplayUnit, nAfterFee));      // After Fee
+    l2->setText(RitoUnits::formatWithCustomName(QString::fromStdString(strAssetName), nAssetAmount));        // Amount
+    l3->setText(RitoUnits::formatWithUnit(nDisplayUnit, nPayFee));        // Fee
+    l4->setText(RitoUnits::formatWithUnit(nDisplayUnit, nAfterFee));      // After Fee
     l5->setText(((nBytes > 0) ? ASYMP_UTF8 : "") + QString::number(nBytes));        // Bytes
     l7->setText(fDust ? tr("yes") : tr("no"));                               // Dust
-    l8->setText(RavenUnits::formatWithCustomName(QString::fromStdString(strAssetName), nChange));        // Change
+    l8->setText(RitoUnits::formatWithCustomName(QString::fromStdString(strAssetName), nChange));        // Change
     if (nPayFee > 0)
     {
         l3->setText(ASYMP_UTF8 + l3->text());
@@ -677,7 +698,7 @@ void AssetControlDialog::updateView()
             if (ExtractDestination(out.tx->tx->vout[out.i].scriptPubKey, outputAddress)) {
                 sAddress = QString::fromStdString(EncodeDestination(outputAddress));
 
-                // if listMode or change => show raven address. In tree mode, address is not shown again for direct wallet address outputs
+                // if listMode or change => show rito address. In tree mode, address is not shown again for direct wallet address outputs
                 if (!treeMode || (!(sAddress == sWalletAddress))) {
                     itemOutput->setText(COLUMN_ADDRESS, sAddress);
                     // asset name
@@ -700,7 +721,7 @@ void AssetControlDialog::updateView()
             }
 
             // amount
-            itemOutput->setText(COLUMN_AMOUNT, RavenUnits::format(nDisplayUnit, nAmount));
+            itemOutput->setText(COLUMN_AMOUNT, RitoUnits::format(nDisplayUnit, nAmount));
             itemOutput->setData(COLUMN_AMOUNT, Qt::UserRole,
                                 QVariant((qlonglong) nAmount)); // padding so that sorting works correctly
 
@@ -735,7 +756,7 @@ void AssetControlDialog::updateView()
         // amount
         if (treeMode) {
             itemWalletAddress->setText(COLUMN_CHECKBOX, "(" + QString::number(nChildren) + ")");
-            itemWalletAddress->setText(COLUMN_AMOUNT, RavenUnits::format(nDisplayUnit, nSum));
+            itemWalletAddress->setText(COLUMN_AMOUNT, RitoUnits::format(nDisplayUnit, nSum));
             itemWalletAddress->setData(COLUMN_AMOUNT, Qt::UserRole, QVariant((qlonglong) nSum));
         }
     }
@@ -778,19 +799,17 @@ void AssetControlDialog::updateAssetList(bool fSetOnStart)
         GetAllMyAssets(model->getWallet(), assets, 0);
 
     QStringList list;
+    list << "";
     for (auto name : assets) {
         list << QString::fromStdString(name);
     }
-    ui->assetList->clear();
 
-    // Add the assets into the dropdown menu
-    ui->assetList->addItem("Select as asset to view");
-    ui->assetList->addItems(list);
+    stringModel->setStringList(list);
 
     int index = ui->assetList->findText(QString::fromStdString(assetControl->strAssetSelected));
-    if ( index != -1 ) { // -1 for not found
+    if (index != -1 ) { // -1 for not found
         fOnStartUp = fSetOnStart;
-        ui->assetList->setCurrentText(QString::fromStdString(assetControl->strAssetSelected));
+        ui->assetList->setCurrentIndex(index);
     }
 
     updateView();

@@ -1,6 +1,9 @@
-// Copyright 2016 Wladimir J. van der Laan
+// Copyright (c) 2016-2017 The Bitcoin Core developers
+// Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+// Copyright 2016 Wladimir J. van der Laan
 #ifndef UNIVALUE_UTFFILTER_H
 #define UNIVALUE_UTFFILTER_H
 

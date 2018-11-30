@@ -1,10 +1,11 @@
-// Copyright (c) 2015-2016 The Bitcoin Core developers
+// Copyright (c) 2014-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_ZMQ_ZMQPUBLISHNOTIFIER_H
-#define RAVEN_ZMQ_ZMQPUBLISHNOTIFIER_H
+#ifndef RITO_ZMQ_ZMQPUBLISHNOTIFIER_H
+#define RITO_ZMQ_ZMQPUBLISHNOTIFIER_H
 
 #include "zmqabstractnotifier.h"
 
@@ -53,4 +54,4 @@ public:
     bool NotifyTransaction(const CTransaction &transaction) override;
 };
 
-#endif // RAVEN_ZMQ_ZMQPUBLISHNOTIFIER_H
+#endif // RITO_ZMQ_ZMQPUBLISHNOTIFIER_H

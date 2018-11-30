@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
+# Copyright (c) 2014-2018 The Bitcoin Core developers
+# Copyright (c) 2017 The Raven Core developers
+# Copyright (c) 2018 The Rito Core developers
+# Distributed under the MIT software license, see the accompanying
+# file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #
 # linearize-data.py: Construct a linear, no-fork version of the chain.
 #
-# Copyright (c) 2013-2016 The Bitcoin Core developers
-# Copyright (c) 2017 The Raven Core developers
-# Distributed under the MIT software license, see the accompanying
-# file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #
 
 from __future__ import print_function, division

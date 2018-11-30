@@ -1,15 +1,16 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2013-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_QT_WALLETFRAME_H
-#define RAVEN_QT_WALLETFRAME_H
+#ifndef RITO_QT_WALLETFRAME_H
+#define RITO_QT_WALLETFRAME_H
 
 #include <QFrame>
 #include <QMap>
 
-class RavenGUI;
+class RitoGUI;
 class ClientModel;
 class PlatformStyle;
 class SendCoinsRecipient;
@@ -22,9 +23,9 @@ QT_END_NAMESPACE
 
 /**
  * A container for embedding all wallet-related
- * controls into RavenGUI. The purpose of this class is to allow future
+ * controls into RitoGUI. The purpose of this class is to allow future
  * refinements of the wallet controls with minimal need for further
- * modifications to RavenGUI, thus greatly simplifying merges while
+ * modifications to RitoGUI, thus greatly simplifying merges while
  * reducing the risk of breaking top-level stuff.
  */
 class WalletFrame : public QFrame
@@ -32,7 +33,7 @@ class WalletFrame : public QFrame
     Q_OBJECT
 
 public:
-    explicit WalletFrame(const PlatformStyle *platformStyle, RavenGUI *_gui = 0);
+    explicit WalletFrame(const PlatformStyle *platformStyle, RitoGUI *_gui = 0);
     ~WalletFrame();
 
     void setClientModel(ClientModel *clientModel);
@@ -54,7 +55,7 @@ Q_SIGNALS:
 
 private:
     QStackedWidget *walletStack;
-    RavenGUI *gui;
+    RitoGUI *gui;
     ClientModel *clientModel;
     QMap<QString, WalletView*> mapWalletViews;
 
@@ -95,11 +96,13 @@ public Q_SLOTS:
     /** Pass on signal over requested out-of-sync-warning information */
     void outOfSyncWarningClicked();
 
-    /** RVN START */
+    /** RITO START */
 
     /** Switch to assets page */
     void gotoAssetsPage();
-    /** RVN END */
+    void gotoCreateAssetsPage();
+    void gotoManageAssetsPage();
+    /** RITO END */
 };
 
-#endif // RAVEN_QT_WALLETFRAME_H
+#endif // RITO_QT_WALLETFRAME_H

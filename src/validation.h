@@ -1,14 +1,14 @@
-// Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
+// Copyright (c) 2016-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_VALIDATION_H
-#define RAVEN_VALIDATION_H
+#ifndef RITO_VALIDATION_H
+#define RITO_VALIDATION_H
 
 #if defined(HAVE_CONFIG_H)
-#include "config/raven-config.h"
+#include "config/rito-config.h"
 #endif
 
 #include "amount.h"
@@ -480,14 +480,14 @@ extern CCoinsViewCache *pcoinsTip;
 /** Global variable that points to the active block tree (protected by cs_main) */
 extern CBlockTreeDB *pblocktree;
 
-/** RVN START */
+/** RITO START */
 /** Global variable that point to the active assets database (protexted by cs_main) */
 extern CAssetsDB *passetsdb;
 /** Global variable that point to the active assets (protexted by cs_main) */
 extern CAssetsCache *passets;
 /** Global variable that point to the assets LRU Cache (protexted by cs_main) */
 extern CLRUCache<std::string, CDatabasedAssetData> *passetsCache;
-/** RVN END */
+/** RITO END */
 
 /**
  * Return the spend height, which is one more than the inputs.GetBestBlock().
@@ -520,10 +520,10 @@ bool DumpMempool();
 /** Load the mempool from disk. */
 bool LoadMempool();
 
-/** RVN START */
+/** RITO START */
 bool AreAssetsDeployed();
 
 bool IsDGWActive(unsigned int nBlockNumber);
-/** RVN END */
+/** RITO END */
 
-#endif // RAVEN_VALIDATION_H
+#endif // RITO_VALIDATION_H

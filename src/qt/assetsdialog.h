@@ -1,10 +1,11 @@
-﻿// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_QT_ASSETSDIALOG_H
-#define RAVEN_QT_ASSETSDIALOG_H
+#ifndef RITO_QT_ASSETSDIALOG_H
+#define RITO_QT_ASSETSDIALOG_H
 
 #include "walletmodel.h"
 
@@ -26,7 +27,7 @@ QT_BEGIN_NAMESPACE
 class QUrl;
 QT_END_NAMESPACE
 
-/** Dialog for sending ravens */
+/** Dialog for sending ritos */
 class AssetsDialog : public QDialog
 {
     Q_OBJECT
@@ -37,6 +38,9 @@ public:
 
     void setClientModel(ClientModel *clientModel);
     void setModel(WalletModel *model);
+    void setupAssetControlFrame(const PlatformStyle *platformStyle);
+    void setupScrollView(const PlatformStyle *platformStyle);
+    void setupFeeControl(const PlatformStyle *platformStyle);
 
     /** Set up the tab chain manually, as Qt messes up the tab chain by default in some cases (issue https://bugreports.qt-project.org/browse/QTBUG-10907).
      */
@@ -55,6 +59,7 @@ public Q_SLOTS:
     void updateTabsAndLabels();
     void setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance,
                     const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance);
+    void focusAssetListBox();
 
 private:
     Ui::AssetsDialog *ui;
@@ -98,16 +103,15 @@ private Q_SLOTS:
 
     void customFeeFeatureChanged(bool);
 
-    /** RVN START */
-    void createAssetButtonClicked();
-    void reissueAssetButtonClicked();
+    /** RITO START */
     void mineButtonClicked();
     void assetControlUpdateSendCoinsDialog();
-    /** RVN END */
+    void focusAsset(const QModelIndex& index);
+    /** RITO END */
 
     Q_SIGNALS:
             // Fired when a message should be reported to the user
             void message(const QString &title, const QString &message, unsigned int style);
 };
 
-#endif // RAVEN_QT_ASSETSSDIALOG_H
+#endif // RITO_QT_ASSETSSDIALOG_H

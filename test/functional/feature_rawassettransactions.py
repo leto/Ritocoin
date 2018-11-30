@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-# Copyright (c) 2014-2016 The Bitcoin Core developers
-# Copyright (c) 2017-2018 The Raven Core developers
+# Copyright (c) 2018 The Bitcoin Core developers
+# Copyright (c) 2017 The Raven Core developers
+# Copyright (c) 2018 The Rito Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test the rawtransaction RPCs for asset transactions.
 """
 from io import BytesIO
 from pprint import *
-from test_framework.test_framework import RavenTestFramework
+from test_framework.test_framework import RitoTestFramework
 from test_framework.util import *
 from test_framework.mininode import *
 
@@ -36,13 +37,13 @@ def get_tx_issue_hex(node, asset_name, asset_quantity, asset_units=0):
     return tx_issue_hex
 
 
-class RawAssetTransactionsTest(RavenTestFramework):
+class RawAssetTransactionsTest(RitoTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 3
 
     def activate_assets(self):
-        self.log.info("Generating RVN for node[0] and activating assets...")
+        self.log.info("Generating RITO for node[0] and activating assets...")
         n0, n1, n2 = self.nodes[0], self.nodes[1], self.nodes[2]
 
         n0.generate(1)
@@ -244,13 +245,13 @@ class RawAssetTransactionsTest(RavenTestFramework):
         f = BytesIO(hex_str_to_bytes(tx_issue_hex))
         tx.deserialize(f)
         rvno = '72766e6f' #rvno
-        RVNO = '52564e4f' #RVNO
+        RITOO = '52564e4f' #RITOO
         # change the owner output script type to be invalid
         for n in range(0, len(tx.vout)):
             out = tx.vout[n]
             if rvno in bytes_to_hex_str(out.scriptPubKey):
                 owner_script_hex = bytes_to_hex_str(out.scriptPubKey)
-                tampered_script = owner_script_hex.replace(rvno, RVNO)
+                tampered_script = owner_script_hex.replace(rvno, RITOO)
                 tx.vout[n].scriptPubKey = hex_str_to_bytes(tampered_script)
         tx_bad_issue = bytes_to_hex_str(tx.serialize())
         tx_bad_issue_signed = n0.signrawtransaction(tx_bad_issue)['hex']
@@ -740,7 +741,7 @@ class RawAssetTransactionsTest(RavenTestFramework):
         ########################################
         # rvn for assets
 
-        # n1 buys 400 ANDUIN from n2 for 4000 RVN
+        # n1 buys 400 ANDUIN from n2 for 4000 RITO
         price = 4000
         amount = 400
         fee = 0.0001
@@ -791,7 +792,7 @@ class RawAssetTransactionsTest(RavenTestFramework):
         ########################################
         # rvn for owner
 
-        # n2 buys JAINA! from n1 for 20000 RVN
+        # n2 buys JAINA! from n1 for 20000 RITO
         price = 20000
         amount = 1
         balance1 = newbalance1

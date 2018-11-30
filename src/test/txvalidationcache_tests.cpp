@@ -1,5 +1,6 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2015-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -13,7 +14,7 @@
 #include "random.h"
 #include "script/standard.h"
 #include "script/sign.h"
-#include "test/test_raven.h"
+#include "test/test_rito.h"
 #include "utiltime.h"
 #include "core_io.h"
 #include "keystore.h"

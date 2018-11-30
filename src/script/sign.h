@@ -1,11 +1,11 @@
-// Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
+// Copyright (c) 2014-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_SCRIPT_SIGN_H
-#define RAVEN_SCRIPT_SIGN_H
+#ifndef RITO_SCRIPT_SIGN_H
+#define RITO_SCRIPT_SIGN_H
 
 #include "script/interpreter.h"
 
@@ -82,4 +82,4 @@ SignatureData CombineSignatures(const CScript& scriptPubKey, const BaseSignature
 SignatureData DataFromTransaction(const CMutableTransaction& tx, unsigned int nIn);
 void UpdateTransaction(CMutableTransaction& tx, unsigned int nIn, const SignatureData& data);
 
-#endif // RAVEN_SCRIPT_SIGN_H
+#endif // RITO_SCRIPT_SIGN_H

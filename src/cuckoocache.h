@@ -1,9 +1,11 @@
-// Copyright (c) 2016 Jeremy Rubin
+// Copyright (c) 2016-2018 The Bitcoin Core developers
+// Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_CUCKOOCACHE_H
-#define RAVEN_CUCKOOCACHE_H
+#ifndef RITO_CUCKOOCACHE_H
+#define RITO_CUCKOOCACHE_H
 
 #include <array>
 #include <algorithm>
@@ -478,4 +480,4 @@ public:
 };
 } // namespace CuckooCache
 
-#endif // RAVEN_CUCKOOCACHE_H
+#endif // RITO_CUCKOOCACHE_H

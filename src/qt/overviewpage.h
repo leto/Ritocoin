@@ -1,12 +1,14 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_QT_OVERVIEWPAGE_H
-#define RAVEN_QT_OVERVIEWPAGE_H
+#ifndef RITO_QT_OVERVIEWPAGE_H
+#define RITO_QT_OVERVIEWPAGE_H
 
 #include "amount.h"
+#include "init.h"
 
 #include <QSortFilterProxyModel>
 #include <QWidget>
@@ -17,6 +19,9 @@ class TransactionFilterProxy;
 class TxViewDelegate;
 class PlatformStyle;
 class WalletModel;
+class AssetFilterProxy;
+
+class AssetViewDelegate;
 
 namespace Ui {
     class OverviewPage;
@@ -48,6 +53,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void transactionClicked(const QModelIndex &index);
+    void assetClicked(const QModelIndex &index);
     void outOfSyncWarningClicked();
 
 private:
@@ -63,14 +69,18 @@ private:
 
     TxViewDelegate *txdelegate;
     std::unique_ptr<TransactionFilterProxy> filter;
-    std::unique_ptr<QSortFilterProxyModel> assetFilter;
+    std::unique_ptr<AssetFilterProxy> assetFilter;
+
+    AssetViewDelegate *assetdelegate;
 
 private Q_SLOTS:
     void updateDisplayUnit();
     void handleTransactionClicked(const QModelIndex &index);
+    void handleAssetClicked(const QModelIndex &index);
     void updateAlerts(const QString &warnings);
     void updateWatchOnlyLabels(bool showWatchOnly);
     void handleOutOfSyncWarningClicks();
+    void assetSearchChanged();
 };
 
-#endif // RAVEN_QT_OVERVIEWPAGE_H
+#endif // RITO_QT_OVERVIEWPAGE_H

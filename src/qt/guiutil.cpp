@@ -1,12 +1,13 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "guiutil.h"
 
-#include "ravenaddressvalidator.h"
-#include "ravenunits.h"
+#include "ritoaddressvalidator.h"
+#include "ritounits.h"
 #include "qvalidatedlineedit.h"
 #include "walletmodel.h"
 
@@ -53,6 +54,7 @@
 #include <QTextDocument> // for Qt::mightBeRichText
 #include <QThread>
 #include <QMouseEvent>
+#include <QPainter>
 
 #if QT_VERSION < 0x050000
 #include <QUrl>
@@ -76,7 +78,40 @@ extern double NSAppKitVersionNumber;
 #endif
 #endif
 
+#include <QGraphicsDropShadowEffect>
+#include "guiconstants.h"
+#include "platformstyle.h"
+
 namespace GUIUtil {
+
+QFont getSubLabelFont()
+{
+    QFont labelSubFont;
+    labelSubFont.setFamily("Arial");
+    labelSubFont.setLetterSpacing(QFont::SpacingType::AbsoluteSpacing, -0.6);
+    labelSubFont.setPixelSize(14);
+    labelSubFont.setBold(false);
+    return labelSubFont;
+}
+
+QFont getTopLabelFont()
+{
+    QFont labelTopFont;
+    labelTopFont.setFamily("Arial");
+    labelTopFont.setLetterSpacing(QFont::SpacingType::AbsoluteSpacing, 0.3);
+    labelTopFont.setPixelSize(18);
+    labelTopFont.setBold(true);
+    return labelTopFont;
+}
+
+QGraphicsDropShadowEffect* getShadowEffect()
+{
+    QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect;
+    shadow->setBlurRadius(50);
+    shadow->setColor(darkModeEnabled ? COLOR_SHADOW_DARK : COLOR_SHADOW_LIGHT);
+    shadow->setOffset(8.0);
+    return shadow;
+}
 
 QString dateTimeStr(const QDateTime &date)
 {
@@ -129,11 +164,11 @@ void setupAddressWidget(QValidatedLineEdit *widget, QWidget *parent)
 #if QT_VERSION >= 0x040700
     // We don't want translators to use own addresses in translations
     // and this is the only place, where this address is supplied.
-    widget->setPlaceholderText(QObject::tr("Enter a Raven address (e.g. %1)").arg(
+    widget->setPlaceholderText(QObject::tr("Enter a Rito address (e.g. %1)").arg(
         QString::fromStdString(DummyAddress(Params()))));
 #endif
-    widget->setValidator(new RavenAddressEntryValidator(parent));
-    widget->setCheckValidator(new RavenAddressCheckValidator(parent));
+    widget->setValidator(new RitoAddressEntryValidator(parent));
+    widget->setCheckValidator(new RitoAddressCheckValidator(parent));
 }
 
 void setupAmountWidget(QLineEdit *widget, QWidget *parent)
@@ -145,10 +180,10 @@ void setupAmountWidget(QLineEdit *widget, QWidget *parent)
     widget->setAlignment(Qt::AlignRight|Qt::AlignVCenter);
 }
 
-bool parseRavenURI(const QUrl &uri, SendCoinsRecipient *out)
+bool parseRitoURI(const QUrl &uri, SendCoinsRecipient *out)
 {
-    // return if URI is not valid or is no raven: URI
-    if(!uri.isValid() || uri.scheme() != QString("raven"))
+    // return if URI is not valid or is no rito: URI
+    if(!uri.isValid() || uri.scheme() != QString("rito"))
         return false;
 
     SendCoinsRecipient rv;
@@ -188,7 +223,7 @@ bool parseRavenURI(const QUrl &uri, SendCoinsRecipient *out)
         {
             if(!i->second.isEmpty())
             {
-                if(!RavenUnits::parse(RavenUnits::RVN, i->second, &rv.amount))
+                if(!RitoUnits::parse(RitoUnits::RITO, i->second, &rv.amount))
                 {
                     return false;
                 }
@@ -206,28 +241,28 @@ bool parseRavenURI(const QUrl &uri, SendCoinsRecipient *out)
     return true;
 }
 
-bool parseRavenURI(QString uri, SendCoinsRecipient *out)
+bool parseRitoURI(QString uri, SendCoinsRecipient *out)
 {
-    // Convert raven:// to raven:
+    // Convert rito:// to rito:
     //
-    //    Cannot handle this later, because raven:// will cause Qt to see the part after // as host,
+    //    Cannot handle this later, because rito:// will cause Qt to see the part after // as host,
     //    which will lower-case it (and thus invalidate the address).
-    if(uri.startsWith("raven://", Qt::CaseInsensitive))
+    if(uri.startsWith("rito://", Qt::CaseInsensitive))
     {
-        uri.replace(0, 10, "raven:");
+        uri.replace(0, 10, "rito:");
     }
     QUrl uriInstance(uri);
-    return parseRavenURI(uriInstance, out);
+    return parseRitoURI(uriInstance, out);
 }
 
-QString formatRavenURI(const SendCoinsRecipient &info)
+QString formatRitoURI(const SendCoinsRecipient &info)
 {
-    QString ret = QString("raven:%1").arg(info.address);
+    QString ret = QString("rito:%1").arg(info.address);
     int paramCount = 0;
 
     if (info.amount)
     {
-        ret += QString("?amount=%1").arg(RavenUnits::format(RavenUnits::RVN, info.amount, false, RavenUnits::separatorNever));
+        ret += QString("?amount=%1").arg(RitoUnits::format(RitoUnits::RITO, info.amount, false, RitoUnits::separatorNever));
         paramCount++;
     }
 
@@ -417,9 +452,9 @@ void openDebugLogfile()
         QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathDebug)));
 }
 
-bool openRavenConf()
+bool openRitoConf()
 {
-    boost::filesystem::path pathConfig = GetConfigFile(RAVEN_CONF_FILENAME);
+    boost::filesystem::path pathConfig = GetConfigFile(RITO_CONF_FILENAME);
 
     /* Create the file */
     boost::filesystem::ofstream configFile(pathConfig, std::ios_base::app);
@@ -429,7 +464,7 @@ bool openRavenConf()
     
     configFile.close();
     
-    /* Open raven.conf with the associated application */
+    /* Open rito.conf with the associated application */
     return QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathConfig)));
 }
 
@@ -617,15 +652,15 @@ fs::path static StartupShortcutPath()
 {
     std::string chain = ChainNameFromCommandLine();
     if (chain == CBaseChainParams::MAIN)
-        return GetSpecialFolderPath(CSIDL_STARTUP) / "Raven.lnk";
+        return GetSpecialFolderPath(CSIDL_STARTUP) / "Rito.lnk";
     if (chain == CBaseChainParams::TESTNET) // Remove this special case when CBaseChainParams::TESTNET = "testnet4"
-        return GetSpecialFolderPath(CSIDL_STARTUP) / "Raven (testnet).lnk";
-    return GetSpecialFolderPath(CSIDL_STARTUP) / strprintf("Raven (%s).lnk", chain);
+        return GetSpecialFolderPath(CSIDL_STARTUP) / "Rito (testnet).lnk";
+    return GetSpecialFolderPath(CSIDL_STARTUP) / strprintf("Rito (%s).lnk", chain);
 }
 
 bool GetStartOnSystemStartup()
 {
-    // check for Raven*.lnk
+    // check for Rito*.lnk
     return fs::exists(StartupShortcutPath());
 }
 
@@ -715,8 +750,8 @@ fs::path static GetAutostartFilePath()
 {
     std::string chain = ChainNameFromCommandLine();
     if (chain == CBaseChainParams::MAIN)
-        return GetAutostartDir() / "raven.desktop";
-    return GetAutostartDir() / strprintf("raven-%s.lnk", chain);
+        return GetAutostartDir() / "rito.desktop";
+    return GetAutostartDir() / strprintf("rito-%s.lnk", chain);
 }
 
 bool GetStartOnSystemStartup()
@@ -756,13 +791,13 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         if (!optionFile.good())
             return false;
         std::string chain = ChainNameFromCommandLine();
-        // Write a raven.desktop file to the autostart directory:
+        // Write a rito.desktop file to the autostart directory:
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
         if (chain == CBaseChainParams::MAIN)
-            optionFile << "Name=Raven\n";
+            optionFile << "Name=Rito\n";
         else
-            optionFile << strprintf("Name=Raven (%s)\n", chain);
+            optionFile << strprintf("Name=Rito (%s)\n", chain);
         optionFile << "Exec=" << pszExePath << strprintf(" -min -testnet=%d -regtest=%d\n", gArgs.GetBoolArg("-testnet", false), gArgs.GetBoolArg("-regtest", false));
         optionFile << "Terminal=false\n";
         optionFile << "Hidden=false\n";
@@ -788,7 +823,7 @@ LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list, CFURLRef
         return nullptr;
     }
     
-    // loop through the list of startup items and try to find the raven app
+    // loop through the list of startup items and try to find the rito app
     for(int i = 0; i < CFArrayGetCount(listSnapshot); i++) {
         LSSharedFileListItemRef item = (LSSharedFileListItemRef)CFArrayGetValueAtIndex(listSnapshot, i);
         UInt32 resolutionFlags = kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes;
@@ -822,38 +857,38 @@ LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list, CFURLRef
 
 bool GetStartOnSystemStartup()
 {
-    CFURLRef ravenAppUrl = CFBundleCopyBundleURL(CFBundleGetMainBundle());
-    if (ravenAppUrl == nullptr) {
+    CFURLRef ritoAppUrl = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    if (ritoAppUrl == nullptr) {
         return false;
     }
     
     LSSharedFileListRef loginItems = LSSharedFileListCreate(nullptr, kLSSharedFileListSessionLoginItems, nullptr);
-    LSSharedFileListItemRef foundItem = findStartupItemInList(loginItems, ravenAppUrl);
+    LSSharedFileListItemRef foundItem = findStartupItemInList(loginItems, ritoAppUrl);
 
-    CFRelease(ravenAppUrl);
+    CFRelease(ritoAppUrl);
     return !!foundItem; // return boolified object
 }
 
 bool SetStartOnSystemStartup(bool fAutoStart)
 {
-    CFURLRef ravenAppUrl = CFBundleCopyBundleURL(CFBundleGetMainBundle());
-    if (ravenAppUrl == nullptr) {
+    CFURLRef ritoAppUrl = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    if (ritoAppUrl == nullptr) {
         return false;
     }
     
     LSSharedFileListRef loginItems = LSSharedFileListCreate(nullptr, kLSSharedFileListSessionLoginItems, nullptr);
-    LSSharedFileListItemRef foundItem = findStartupItemInList(loginItems, ravenAppUrl);
+    LSSharedFileListItemRef foundItem = findStartupItemInList(loginItems, ritoAppUrl);
 
     if(fAutoStart && !foundItem) {
-        // add raven app to startup item list
-        LSSharedFileListInsertItemURL(loginItems, kLSSharedFileListItemBeforeFirst, nullptr, nullptr, ravenAppUrl, nullptr, nullptr);
+        // add rito app to startup item list
+        LSSharedFileListInsertItemURL(loginItems, kLSSharedFileListItemBeforeFirst, nullptr, nullptr, ritoAppUrl, nullptr, nullptr);
     }
     else if(!fAutoStart && foundItem) {
         // remove item
         LSSharedFileListItemRemove(loginItems, foundItem);
     }
     
-    CFRelease(ravenAppUrl);
+    CFRelease(ritoAppUrl);
     return true;
 }
 #pragma GCC diagnostic pop
@@ -1005,6 +1040,35 @@ void ClickableLabel::mouseReleaseEvent(QMouseEvent *event)
 void ClickableProgressBar::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_EMIT clicked(event->pos());
+}
+
+void concatenate(QPainter* painter, QString& catString, int static_width, int left_side, int right_size)
+{
+    // Starting length of the name
+    int start_name_length = catString.size();
+
+    // Get the length of the dots
+    int dots_width = painter->fontMetrics().width("...");
+
+    // Add the dots width to the amount width
+    static_width += dots_width;
+
+    // Start concatenation loop, end loop if name is at three characters
+    while (catString.size() > 3) {
+        // Get the text width of the current name
+        int text_width = painter->fontMetrics().width(catString);
+
+        // Check to see if the text width is going to overlap the amount width if it doesn't break the loop
+        if (left_side + text_width < right_size - static_width)
+            break;
+
+        // substring the name minus the last character of it and continue the loop
+        catString = catString.left(catString.size() - 1);
+    }
+
+    // Add the ... if the name was concatenated
+    if (catString.size() != start_name_length)
+        catString.append("...");
 }
 
 } // namespace GUIUtil

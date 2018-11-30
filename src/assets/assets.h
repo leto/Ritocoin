@@ -1,10 +1,12 @@
+// Copyright (c) 2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 
-#ifndef RAVENCOIN_ASSET_PROTOCOL_H
-#define RAVENCOIN_ASSET_PROTOCOL_H
+#ifndef RITOCOIN_ASSET_PROTOCOL_H
+#define RITOCOIN_ASSET_PROTOCOL_H
 
 #include "amount.h"
 #include "tinyformat.h"
@@ -16,12 +18,12 @@
 #include <unordered_map>
 #include <list>
 
-#define RVN_R 114
-#define RVN_V 118
-#define RVN_N 110
-#define RVN_Q 113
-#define RVN_T 116
-#define RVN_O 111
+#define RITO_R 114
+#define RITO_V 118
+#define RITO_N 110
+#define RITO_Q 113
+#define RITO_T 116
+#define RITO_O 111
 
 #define DEFAULT_UNITS 0
 #define DEFAULT_REISSUABLE 1
@@ -396,4 +398,4 @@ bool CreateAssetTransaction(CWallet* pwallet, CCoinControl& coinControl, const s
 bool CreateReissueAssetTransaction(CWallet* pwallet, CCoinControl& coinControl, const CReissueAsset& asset, const std::string& address, std::pair<int, std::string>& error, CWalletTx& wtxNew, CReserveKey& reservekey, CAmount& nFeeRequired);
 bool CreateTransferAssetTransaction(CWallet* pwallet, const CCoinControl& coinControl, const std::vector< std::pair<CAssetTransfer, std::string> >vTransfers, const std::string& changeAddress, std::pair<int, std::string>& error, CWalletTx& wtxNew, CReserveKey& reservekey, CAmount& nFeeRequired);
 bool SendAssetTransaction(CWallet* pwallet, CWalletTx& transaction, CReserveKey& reserveKey, std::pair<int, std::string>& error, std::string& txid);
-#endif //RAVENCOIN_ASSET_PROTOCOL_H
+#endif //RITOCOIN_ASSET_PROTOCOL_H

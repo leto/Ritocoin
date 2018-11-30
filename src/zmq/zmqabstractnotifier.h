@@ -1,10 +1,11 @@
-// Copyright (c) 2015 The Bitcoin Core developers
+// Copyright (c) 2014-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef RAVEN_ZMQ_ZMQABSTRACTNOTIFIER_H
-#define RAVEN_ZMQ_ZMQABSTRACTNOTIFIER_H
+#ifndef RITO_ZMQ_ZMQABSTRACTNOTIFIER_H
+#define RITO_ZMQ_ZMQABSTRACTNOTIFIER_H
 
 #include "zmqconfig.h"
 
@@ -42,4 +43,4 @@ protected:
     std::string address;
 };
 
-#endif // RAVEN_ZMQ_ZMQABSTRACTNOTIFIER_H
+#endif // RITO_ZMQ_ZMQABSTRACTNOTIFIER_H

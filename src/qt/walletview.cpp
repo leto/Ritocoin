@@ -1,5 +1,6 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2013-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -7,7 +8,7 @@
 
 #include "addressbookpage.h"
 #include "askpassphrasedialog.h"
-#include "ravengui.h"
+#include "ritogui.h"
 #include "clientmodel.h"
 #include "guiutil.h"
 #include "optionsmodel.h"
@@ -21,6 +22,8 @@
 #include "transactionview.h"
 #include "walletmodel.h"
 #include "assetsdialog.h"
+#include "createassetdialog.h"
+#include "reissueassetdialog.h"
 #include <validation.h>
 
 #include "ui_interface.h"
@@ -62,6 +65,8 @@ WalletView::WalletView(const PlatformStyle *_platformStyle, QWidget *parent):
     sendCoinsPage = new SendCoinsDialog(platformStyle);
 
     assetsPage = new AssetsDialog(platformStyle);
+    createAssetsPage = new CreateAssetDialog(platformStyle);
+    manageAssetsPage = new ReissueAssetDialog(platformStyle);
 
     usedSendingAddressesPage = new AddressBookPage(platformStyle, AddressBookPage::ForEditing, AddressBookPage::SendingTab, this);
     usedReceivingAddressesPage = new AddressBookPage(platformStyle, AddressBookPage::ForEditing, AddressBookPage::ReceivingTab, this);
@@ -71,9 +76,11 @@ WalletView::WalletView(const PlatformStyle *_platformStyle, QWidget *parent):
     addWidget(receiveCoinsPage);
     addWidget(sendCoinsPage);
 
-    /** RVN START */
+    /** RITO START */
     addWidget(assetsPage);
-    /** RVN END */
+    addWidget(createAssetsPage);
+    addWidget(manageAssetsPage);
+    /** RITO END */
 
     // Clicking on a transaction on the overview pre-selects the transaction on the transaction history page
     connect(overviewPage, SIGNAL(transactionClicked(QModelIndex)), transactionView, SLOT(focusTransaction(QModelIndex)));
@@ -90,8 +97,11 @@ WalletView::WalletView(const PlatformStyle *_platformStyle, QWidget *parent):
     // Pass through messages from transactionView
     connect(transactionView, SIGNAL(message(QString,QString,unsigned int)), this, SIGNAL(message(QString,QString,unsigned int)));
 
-    /** RVN START */
+    /** RITO START */
     connect(assetsPage, SIGNAL(message(QString,QString,unsigned int)), this, SIGNAL(message(QString,QString,unsigned int)));
+    connect(createAssetsPage, SIGNAL(message(QString,QString,unsigned int)), this, SIGNAL(message(QString,QString,unsigned int)));
+    connect(manageAssetsPage, SIGNAL(message(QString,QString,unsigned int)), this, SIGNAL(message(QString,QString,unsigned int)));
+    connect(overviewPage, SIGNAL(assetClicked(QModelIndex)), assetsPage, SLOT(focusAsset(QModelIndex)));
     /** RNV END */
 }
 
@@ -99,12 +109,15 @@ WalletView::~WalletView()
 {
 }
 
-void WalletView::setRavenGUI(RavenGUI *gui)
+void WalletView::setRitoGUI(RitoGUI *gui)
 {
     if (gui)
     {
         // Clicking on a transaction on the overview page simply sends you to transaction history page
         connect(overviewPage, SIGNAL(transactionClicked(QModelIndex)), gui, SLOT(gotoHistoryPage()));
+
+        // Clicking on a asset on the overviewpage simply sends you to the assets page
+        connect(overviewPage, SIGNAL(assetClicked(QModelIndex)), gui, SLOT(gotoAssetsPage()));
 
         // Receive and report messages
         connect(this, SIGNAL(message(QString,QString,unsigned int)), gui, SLOT(message(QString,QString,unsigned int)));
@@ -143,8 +156,10 @@ void WalletView::setWalletModel(WalletModel *_walletModel)
     usedReceivingAddressesPage->setModel(_walletModel ? _walletModel->getAddressTableModel() : nullptr);
     usedSendingAddressesPage->setModel(_walletModel ? _walletModel->getAddressTableModel() : nullptr);
 
-    /** RVN START */
+    /** RITO START */
     assetsPage->setModel(_walletModel);
+    createAssetsPage->setModel(_walletModel);
+    manageAssetsPage->setModel(_walletModel);
 
     if (_walletModel)
     {
@@ -180,7 +195,7 @@ void WalletView::processNewTransaction(const QModelIndex& parent, int start, int
     if (!ttm || ttm->processingQueuedTransactions())
         return;
 
-    /** RVN START */
+    /** RITO START */
     // With the addition of asset transactions, there can be multiple transaction that need notifications
     // so we need to loop through all new transaction that were added to the transaction table and display
     // notifications for each individual transaction
@@ -197,16 +212,17 @@ void WalletView::processNewTransaction(const QModelIndex& parent, int start, int
         Q_EMIT incomingTransaction(date, walletModel->getOptionsModel()->getDisplayUnit(), amount, type, address, label,
                                    assetName);
     }
-    /** RVN END */
+    /** RITO END */
 
     /** Everytime we get an new transaction. We should check to see if assets are enabled or not */
     overviewPage->showAssets();
     transactionView->showAssets();
     Q_EMIT checkAssets();
-    // If we receive a new transaction that contains an asset, we want all of our SendAssetEntries to update
-    // so that the new received assets are displayed in the list
-    if (assetName != "RVN")
-        assetsPage->processNewTransaction();
+
+    assetsPage->processNewTransaction();
+    createAssetsPage->updateAssetList();
+    manageAssetsPage->updateAssetsList();
+
 }
 
 void WalletView::gotoOverviewPage()
@@ -370,10 +386,21 @@ void WalletView::requestedSyncWarningInfo()
     Q_EMIT outOfSyncWarningClicked();
 }
 
-/** RVN START */
+/** RITO START */
 void WalletView::gotoAssetsPage()
 {
     setCurrentWidget(assetsPage);
+    assetsPage->focusAssetListBox();
+}
+
+void WalletView::gotoCreateAssetsPage()
+{
+    setCurrentWidget(createAssetsPage);
+}
+
+void WalletView::gotoManageAssetsPage()
+{
+    setCurrentWidget(manageAssetsPage);
 }
 
 void WalletView::displayAssetInfo()
@@ -381,4 +408,4 @@ void WalletView::displayAssetInfo()
     overviewPage->displayAssetInfo();
     Q_EMIT checkAssets();
 }
-/** RVN END */
+/** RITO END */

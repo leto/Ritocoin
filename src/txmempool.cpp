@@ -1,6 +1,6 @@
-// Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
+// Copyright (c) 2012-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -598,7 +598,7 @@ void CTxMemPool::removeUnchecked(txiter it, MemPoolRemovalReason reason)
     removeAddressIndex(hash);
     removeSpentIndex(hash);
 
-    /** RVN START */
+    /** RITO START */
     // If the transaction being removed from the mempool is locking other reissues. Free them
     if (mapReissuedTx.count(hash)) {
         if (mapReissuedAssets.count(mapReissuedTx.at(hash))) {
@@ -612,7 +612,7 @@ void CTxMemPool::removeUnchecked(txiter it, MemPoolRemovalReason reason)
         mapAssetToHash.erase(mapHashToAsset.at(hash));
         mapHashToAsset.erase(hash);
     }
-    /** RVN END */
+    /** RITO END */
 }
 
 // Calculates descendants of entry that are not already in setDescendants, and adds to
@@ -756,7 +756,7 @@ void CTxMemPool::removeForBlock(const std::vector<CTransactionRef>& vtx, unsigne
             entries.push_back(&*i);
     }
 
-    /** RVN START */
+    /** RITO START */
     // Get the newly added assets, and make sure they are in the entries
     std::vector<CTransaction> trans;
     for (auto it : setNewAssets) {
@@ -768,7 +768,7 @@ void CTxMemPool::removeForBlock(const std::vector<CTransactionRef>& vtx, unsigne
             }
         }
     }
-    /** RVN END */
+    /** RITO END */
 
     // Before the txs in the new block have been removed from the mempool, update policy estimates
     if (minerPolicyEstimator) {minerPolicyEstimator->processBlock(nBlockHeight, entries);}
@@ -784,7 +784,7 @@ void CTxMemPool::removeForBlock(const std::vector<CTransactionRef>& vtx, unsigne
         ClearPrioritisation(tx->GetHash());
     }
 
-    /** RVN START */
+    /** RITO START */
     // Remove newly added asset issue transactions from the mempool if they haven't been removed already
     for (auto tx : trans)
     {
@@ -797,7 +797,7 @@ void CTxMemPool::removeForBlock(const std::vector<CTransactionRef>& vtx, unsigne
         removeConflicts(tx);
         ClearPrioritisation(tx.GetHash());
     }
-    /** RVN END */
+    /** RITO END */
 
     lastRollingFeeUpdate = GetTime();
     blockSinceLastRollingFeeBump = true;
@@ -828,14 +828,14 @@ static void CheckInputsAndUpdateCoins(const CTransaction& tx, CCoinsViewCache& m
     CValidationState state;
     CAmount txfee = 0;
     bool fCheckResult = tx.IsCoinBase() || Consensus::CheckTxInputs(tx, state, mempoolDuplicate, spendheight, txfee);
-    /** RVN START */
+    /** RITO START */
     if (AreAssetsDeployed()) {
         std::vector<std::pair<std::string, uint256>> vReissueAssets;
         bool fCheckAssets = Consensus::CheckTxAssets(tx, state, mempoolDuplicate, vReissueAssets);
         assert(fCheckResult && fCheckAssets);
     } else
         assert(fCheckResult);
-    /** RVN END */
+    /** RITO END */
     UpdateCoins(tx, mempoolDuplicate, 1000000);
 }
 

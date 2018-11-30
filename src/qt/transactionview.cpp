@@ -1,12 +1,13 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2018 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "transactionview.h"
 
 #include "addresstablemodel.h"
-#include "ravenunits.h"
+#include "ritounits.h"
 #include "csvmodelwriter.h"
 #include "editaddressdialog.h"
 #include "guiutil.h"
@@ -19,6 +20,7 @@
 #include "transactiontablemodel.h"
 #include "validation.h"
 #include "walletmodel.h"
+#include "guiconstants.h"
 
 #include "ui_interface.h"
 
@@ -38,6 +40,7 @@
 #include <QTimer>
 #include <QUrl>
 #include <QVBoxLayout>
+#include <QGraphicsDropShadowEffect>
 
 TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *parent) :
     QWidget(parent), model(0), transactionProxyModel(0),
@@ -161,9 +164,11 @@ TransactionView::TransactionView(const PlatformStyle *platformStyle, QWidget *pa
     view->setContextMenuPolicy(Qt::CustomContextMenu);
 
     view->installEventFilter(this);
+    view->setStyleSheet(".QTableView { border: none;}");
 
     transactionView = view;
     transactionView->setObjectName("transactionView");
+
 
     // Actions
     abandonAction = new QAction(tr("Abandon transaction"), this);
@@ -359,7 +364,7 @@ void TransactionView::changedAmount()
     if(!transactionProxyModel)
         return;
     CAmount amount_parsed = 0;
-    if (RavenUnits::parse(model->getOptionsModel()->getDisplayUnit(), amountWidget->text(), &amount_parsed)) {
+    if (RitoUnits::parse(model->getOptionsModel()->getDisplayUnit(), amountWidget->text(), &amount_parsed)) {
         transactionProxyModel->setMinAmount(amount_parsed);
     }
     else
@@ -400,7 +405,7 @@ void TransactionView::exportClicked()
     writer.addColumn(tr("Type"), TransactionTableModel::Type, Qt::EditRole);
     writer.addColumn(tr("Label"), 0, TransactionTableModel::LabelRole);
     writer.addColumn(tr("Address"), 0, TransactionTableModel::AddressRole);
-    writer.addColumn(RavenUnits::getAmountColumnTitle(model->getOptionsModel()->getDisplayUnit()), 0, TransactionTableModel::FormattedAmountRole);
+    writer.addColumn(RitoUnits::getAmountColumnTitle(model->getOptionsModel()->getDisplayUnit()), 0, TransactionTableModel::FormattedAmountRole);
     if (AreAssetsDeployed()) {
         writer.addColumn(tr("Asset"), 0, TransactionTableModel::AssetNameRole);
     }
