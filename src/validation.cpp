@@ -2378,8 +2378,12 @@ static bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockInd
       // first tx and the right amount, we're good to go.
 
       const CTransaction &tx = *(block.vtx[0]);
+      LogPrint(BCLog::BENCH, "Checking transaction 0: txid is %s\n", tx.GetHash().ToString());
+      LogPrint(BCLog::BENCH, "Transaction details: %s\n", tx.ToString().c_str());
+
       for(auto m : tx.vout) {
         if (m.scriptPubKey == scriptPubKey && m.nValue == GetDevCoin(blockReward)) {
+          LogPrint(BCLog::BENCH, "Dev fee found: Value=%d.%08d, scriptPubKey=%s\n", m.nValue / COIN, m.nValue % COIN, HexStr(m.scriptPubKey).substr(0, 30));
           dev_transaction_present++;
         }
       }
