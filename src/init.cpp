@@ -531,7 +531,7 @@ std::string HelpMessage(HelpMessageMode mode)
 
 std::string LicenseInfo()
 {
-    const std::string URL_SOURCE_CODE = "<https://github.com/Ritocoin/Rito>";
+    const std::string URL_SOURCE_CODE = "<https://github.com/RitoProject/Ritocoin>";
     const std::string URL_WEBSITE = "<https://ritocoin.org>";
 
     return CopyrightHolders(strprintf(_("Copyright (C) %i-%i"), 2009, COPYRIGHT_YEAR) + " ") + "\n" +
