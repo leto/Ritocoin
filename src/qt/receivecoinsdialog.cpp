@@ -165,7 +165,8 @@ void ReceiveCoinsDialog::setupHistoryFrame(const PlatformStyle *platformStyle)
 
     ui->label_6->setStyleSheet(COLOR_LABEL_STRING);
 
-    ui->recentRequestsView->setGraphicsEffect(GUIUtil::getShadowEffect());
+    // the line below makes the text disappear.
+    // ui->recentRequestsView->setGraphicsEffect(GUIUtil::getShadowEffect());
     ui->recentRequestsView->setStyleSheet(".QTableView {border: none;}");
 
 }
