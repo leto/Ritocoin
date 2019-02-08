@@ -679,7 +679,17 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
     }
     result.push_back(Pair("curtime", pblock->GetBlockTime()));
     result.push_back(Pair("bits", strprintf("%08x", pblock->nBits)));
-    result.push_back(Pair("height", (int64_t)(pindexPrev->nHeight+1)));
+    // result.push_back(Pair("height", (int64_t)(pindexPrev->nHeight+1)));
+
+    const int nHeight = pindexPrev->nHeight;
+
+    result.push_back(Pair("height", (nHeight + 1)));
+
+    // Ritocoin community bounty fund
+    if (nHeight + 1 <= DEV_FUND_UNTIL) {
+      result.push_back(Pair("payee", DEV_ADDRESS));
+      result.push_back(Pair("payee_amount", (int64_t)pblock->vtx[0]->vout[1].nValue));
+    }
 
     if (!pblocktemplate->vchCoinbaseCommitment.empty() && fSupportsSegwit) {
         result.push_back(Pair("default_witness_commitment", HexStr(pblocktemplate->vchCoinbaseCommitment.begin(), pblocktemplate->vchCoinbaseCommitment.end())));
