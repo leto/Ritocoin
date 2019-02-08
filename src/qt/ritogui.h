@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c)  The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -143,6 +143,8 @@ private:
 
     const PlatformStyle *platformStyle;
 
+    /** Load the custome open sans fonts into the font database */
+    void loadFonts();
     /** Create the main UI actions. */
     void createActions();
     /** Create the menu bar and sub-menus. */

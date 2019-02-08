@@ -1,3 +1,8 @@
+// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c) 2017 The Raven Core developers
+// Copyright (c) 2018 The Rito Core developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "assets/assets.h"
 #include <boost/test/unit_test.hpp>
@@ -10,7 +15,8 @@ BOOST_FIXTURE_TEST_SUITE(cache_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(cache_test)
 {
-    std::cout << "Testing cache test" << std::endl;
+    BOOST_TEST_MESSAGE("Running Cache Test");
+
     CLRUCache<std::string, CNewAsset> cache(NUM_OF_ASSETS1);
 
     std::string assetName = "TEST";

@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c)  The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -55,6 +55,7 @@
 #include <QTranslator>
 #include <QSslConfiguration>
 #include <QDir>
+#include <QFontDatabase>
 
 #if defined(QT_STATICPLUGIN)
 #include <QtPlugin>
@@ -395,8 +396,8 @@ void RitoApplication::createOptionsModel(bool resetSettings)
 void RitoApplication::createWindow(const NetworkStyle *networkStyle)
 {
     window = new RitoGUI(platformStyle, networkStyle, 0);
-    window->setMinimumSize(900,900);
-    window->setBaseSize(900,900);
+    window->setMinimumSize(200,200);
+    window->setBaseSize(640,640);
 
     pollShutdownTimer = new QTimer(window);
     connect(pollShutdownTimer, SIGNAL(timeout()), window, SLOT(detectShutdown()));
@@ -707,6 +708,7 @@ int main(int argc, char *argv[])
     } else {
         app.setStyle("");
     }
+
     // Subscribe to global signals from core
     uiInterface.InitMessage.connect(InitMessage);
 

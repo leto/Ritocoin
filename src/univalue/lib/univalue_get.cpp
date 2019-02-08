@@ -3,8 +3,6 @@
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-// Copyright 2014 BitPay Inc.
-// Copyright 2015 Rito Core Developers
 
 #include <stdint.h>
 #include <errno.h>

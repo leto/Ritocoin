@@ -104,7 +104,6 @@ private Q_SLOTS:
     void customFeeFeatureChanged(bool);
 
     /** RITO START */
-    void mineButtonClicked();
     void assetControlUpdateSendCoinsDialog();
     void focusAsset(const QModelIndex& index);
     /** RITO END */

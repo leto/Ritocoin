@@ -1,8 +1,3 @@
-# Copyright (c) 2013-2016 The Bitcoin Core developers
-# Copyright (c) 2017 The Raven Core developers
-# Copyright (c) 2018 The Rito Core developers
-# Distributed under the MIT software license, see the accompanying
-# file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 bin_PROGRAMS += qt/rito-qt
 EXTRA_LIBRARIES += qt/libritoqt.a
@@ -269,6 +264,7 @@ RES_ICONS = \
   qt/res/icons/about.png \
   qt/res/icons/about_qt.png \
   qt/res/icons/asset_administrator.png \
+  qt/res/icons/asset_administrator_dark.png \
   qt/res/icons/asset_create.png \
   qt/res/icons/asset_create_selected.png \
   qt/res/icons/asset_manage.png \
@@ -356,7 +352,18 @@ RES_ICONS = \
   qt/res/darkstyle/icon_radiobutton_checked_pressed.png \
   qt/res/darkstyle/icon_radiobutton_unchecked_pressed.png \
   qt/res/darkstyle/icon_radiobutton_checked_disabled.png \
-  qt/res/darkstyle/icon_radiobutton_unchecked_disabled.png
+  qt/res/darkstyle/icon_radiobutton_unchecked_disabled.png \
+  qt/res/fonts/OpenSans-Bold.ttf \
+  qt/res/fonts/OpenSans-BoldItalic.ttf \
+  qt/res/fonts/OpenSans-ExtraBold.ttf \
+  qt/res/fonts/OpenSans-ExtraBoldItalic.ttf \
+  qt/res/fonts/OpenSans-Italic.ttf \
+  qt/res/fonts/OpenSans-Light.ttf \
+  qt/res/fonts/OpenSans-LightItalic.ttf \
+  qt/res/fonts/OpenSans-Regular.ttf \
+  qt/res/fonts/OpenSans-SemiBold.ttf \
+  qt/res/fonts/OpenSans-SemiBoldItalic.ttf
+
 
 RITO_QT_BASE_CPP = \
   qt/bantablemodel.cpp \

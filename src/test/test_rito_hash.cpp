@@ -1,16 +1,14 @@
-// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c)  The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <arith_uint256.h>
-// #include <hash.h>
-#include <algo/hashx21s.h>
+#include <hash.h>
 #include <stdio.h>
 #include <string.h>
 #include <utilstrencodings.h>
-#include <iostream>
 
 int main(int argc, char **argv)
 {
@@ -21,9 +19,8 @@ int main(int argc, char **argv)
         std::vector<unsigned char> rawHashPrevBlock(rawHeader.begin() + 4, rawHeader.begin() + 36);
         uint256 hashPrevBlock(rawHashPrevBlock);
 
-        std::cout << HashX21S(rawHeader.data(), rawHeader.data() + 80, hashPrevBlock).GetHex();
-    }
-    else
+        std::cout << HashX16R(rawHeader.data(), rawHeader.data() + 80, hashPrevBlock).GetHex();
+    } else
     {
         std::cerr << "Usage: test_rito_hash blockHex" << std::endl;
         return 1;

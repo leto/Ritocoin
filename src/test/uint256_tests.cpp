@@ -74,8 +74,10 @@ inline uint160 uint160S(const std::string& str)
     return rv;
 }
 
-BOOST_AUTO_TEST_CASE( basics ) // constructors, equality, inequality
+BOOST_AUTO_TEST_CASE(basics_test) // constructors, equality, inequality
 {
+    BOOST_TEST_MESSAGE("Running Basics Test");
+
     BOOST_CHECK(1 == 0+1);
     // constructor uint256(vector<char>):
     BOOST_CHECK(R1L.ToString() == ArrayToString(R1Array,32));
@@ -126,8 +128,10 @@ BOOST_AUTO_TEST_CASE( basics ) // constructors, equality, inequality
     BOOST_CHECK(uint160(OneS) == OneS);
 }
 
-BOOST_AUTO_TEST_CASE( comparison ) // <= >= < >
+BOOST_AUTO_TEST_CASE(comparison_test) // <= >= < >
 {
+    BOOST_TEST_MESSAGE("Running Comparison Test");
+
     uint256 LastL;
     for (int i = 255; i >= 0; --i) {
         uint256 TmpL;
@@ -158,8 +162,10 @@ BOOST_AUTO_TEST_CASE( comparison ) // <= >= < >
     BOOST_CHECK( R2S < MaxS );
 }
 
-BOOST_AUTO_TEST_CASE( methods ) // GetHex SetHex begin() end() size() GetLow64 GetSerializeSize, Serialize, Unserialize
+BOOST_AUTO_TEST_CASE(methods_test) // GetHex SetHex begin() end() size() GetLow64 GetSerializeSize, Serialize, Unserialize
 {
+    BOOST_TEST_MESSAGE("Running Methods Test");
+
     BOOST_CHECK(R1L.GetHex() == R1L.ToString());
     BOOST_CHECK(R2L.GetHex() == R2L.ToString());
     BOOST_CHECK(OneL.GetHex() == OneL.ToString());
@@ -252,8 +258,10 @@ BOOST_AUTO_TEST_CASE( methods ) // GetHex SetHex begin() end() size() GetLow64 G
     ss.clear();
 }
 
-BOOST_AUTO_TEST_CASE( conversion )
+BOOST_AUTO_TEST_CASE(conversion_test)
 {
+    BOOST_TEST_MESSAGE("Running Conversion Test");
+
     BOOST_CHECK(ArithToUint256(UintToArith256(ZeroL)) == ZeroL);
     BOOST_CHECK(ArithToUint256(UintToArith256(OneL)) == OneL);
     BOOST_CHECK(ArithToUint256(UintToArith256(R1L)) == R1L);

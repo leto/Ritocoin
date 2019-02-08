@@ -130,6 +130,13 @@ QIcon PlatformStyle::SingleColorIcon(const QIcon& icon) const
     return ColorizeIcon(icon, SingleColor());
 }
 
+QIcon PlatformStyle::SingleColorIcon(const QIcon& icon, const QColor& color) const
+{
+    if (!colorizeIcons)
+        return icon;
+    return ColorizeIcon(icon, color);
+}
+
 QIcon PlatformStyle::OrangeColorIcon(const QString& filename) const
 {
     if (!colorizeIcons)
@@ -158,7 +165,7 @@ QIcon PlatformStyle::TextColorIcon(const QIcon& icon) const
 QColor PlatformStyle::TextColor() const
 {
     if (darkModeEnabled)
-        return COLOR_ASSET_TEXT;
+        return COLOR_TOOLBAR_SELECTED_TEXT_DARK_MODE;
 
     return textColor;
 }

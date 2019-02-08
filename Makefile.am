@@ -1,8 +1,3 @@
-# Copyright (c) 2013-2016 The Bitcoin Core developers
-# Copyright (c) 2017 The Raven Core developers
-# Copyright (c) 2018 The Rito Core developers
-# Distributed under the MIT software license, see the accompanying
-# file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 ACLOCAL_AMFLAGS = -I build-aux/m4
 SUBDIRS = src
@@ -23,6 +18,7 @@ RITOD_BIN=$(top_builddir)/src/$(RITO_DAEMON_NAME)$(EXEEXT)
 RITO_QT_BIN=$(top_builddir)/src/qt/$(RITO_GUI_NAME)$(EXEEXT)
 RITO_CLI_BIN=$(top_builddir)/src/$(RITO_CLI_NAME)$(EXEEXT)
 RITO_WIN_INSTALLER=$(PACKAGE)-$(PACKAGE_VERSION)-win$(WINDOWS_BITS)-setup$(EXEEXT)
+RITO_CLI_INSTALL=$(top_builddir)/contrib/install_cli.sh
 
 empty :=
 space := $(empty) $(empty)
@@ -97,7 +93,19 @@ $(OSX_APP)/Contents/Resources/rito.icns: $(OSX_INSTALLER_ICONS)
 	$(MKDIR_P) $(@D)
 	$(INSTALL_DATA) $< $@
 
+$(OSX_APP)/Contents/MacOS/install_cli.sh: $(RITO_CLI_INSTALL)
+	$(MKDIR_P) $(@D)
+	$(INSTALL_DATA) $< $@
+
 $(OSX_APP)/Contents/MacOS/Rito-Qt: $(RITO_QT_BIN)
+	$(MKDIR_P) $(@D)
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM)  $< $@
+
+$(OSX_APP)/Contents/MacOS/ritod: $(RITOD_BIN)
+	$(MKDIR_P) $(@D)
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM)  $< $@
+
+$(OSX_APP)/Contents/MacOS/rito-cli: $(RITO_CLI_BIN)
 	$(MKDIR_P) $(@D)
 	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM)  $< $@
 
@@ -107,7 +115,8 @@ $(OSX_APP)/Contents/Resources/Base.lproj/InfoPlist.strings:
 
 OSX_APP_BUILT=$(OSX_APP)/Contents/PkgInfo $(OSX_APP)/Contents/Resources/empty.lproj \
   $(OSX_APP)/Contents/Resources/rito.icns $(OSX_APP)/Contents/Info.plist \
-  $(OSX_APP)/Contents/MacOS/Rito-Qt $(OSX_APP)/Contents/Resources/Base.lproj/InfoPlist.strings
+  $(OSX_APP)/Contents/MacOS/Rito-Qt $(OSX_APP)/Contents/Resources/Base.lproj/InfoPlist.strings \
+  $(OSX_APP)/Contents/MacOS/ritod $(OSX_APP)/Contents/MacOS/rito-cli $(OSX_APP)/Contents/MacOS/install_cli.sh
 
 osx_volname:
 	echo $(OSX_VOLNAME) >$@

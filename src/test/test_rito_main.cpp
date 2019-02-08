@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c)  The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -12,17 +12,17 @@
 
 std::unique_ptr<CConnman> g_connman;
 
-[[noreturn]] void Shutdown(void* parg)
+[[noreturn]] void Shutdown(void *parg)
 {
-  std::exit(EXIT_SUCCESS);
+    std::exit(EXIT_SUCCESS);
 }
 
 [[noreturn]] void StartShutdown()
 {
-  std::exit(EXIT_SUCCESS);
+    std::exit(EXIT_SUCCESS);
 }
 
 bool ShutdownRequested()
 {
-  return false;
+    return false;
 }

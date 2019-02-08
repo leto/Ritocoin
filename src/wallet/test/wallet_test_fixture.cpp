@@ -12,8 +12,8 @@
 
 CWallet *pwalletMain;
 
-WalletTestingSetup::WalletTestingSetup(const std::string& chainName):
-    TestingSetup(chainName)
+WalletTestingSetup::WalletTestingSetup(const std::string &chainName) :
+        TestingSetup(chainName)
 {
     bitdb.MakeMock();
 

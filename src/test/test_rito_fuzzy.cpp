@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c)  The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -28,8 +28,9 @@
 #include <algorithm>
 #include <vector>
 
-enum TEST_ID {
-    CBLOCK_DESERIALIZE=0,
+enum TEST_ID
+{
+    CBLOCK_DESERIALIZE = 0,
     CTRANSACTION_DESERIALIZE,
     CBLOCKLOCATOR_DESERIALIZE,
     CBLOCKMERKLEROOT,
@@ -50,18 +51,21 @@ enum TEST_ID {
     TEST_ID_END
 };
 
-bool read_stdin(std::vector<uint8_t> &data) {
+bool read_stdin(std::vector<uint8_t> &data)
+{
     uint8_t buffer[1024];
-    ssize_t length=0;
-    while((length = read(STDIN_FILENO, buffer, 1024)) > 0) {
-        data.insert(data.end(), buffer, buffer+length);
+    ssize_t length = 0;
+    while ((length = read(STDIN_FILENO, buffer, 1024)) > 0)
+    {
+        data.insert(data.end(), buffer, buffer + length);
 
-        if (data.size() > (1<<20)) return false;
+        if (data.size() > (1 << 20)) return false;
     }
-    return length==0;
+    return length == 0;
 }
 
-int test_one_input(std::vector<uint8_t> buffer) {
+int test_one_input(std::vector<uint8_t> buffer)
+{
     if (buffer.size() < sizeof(uint32_t)) return 0;
 
     uint32_t test_id = 0xffffffff;
@@ -71,22 +75,26 @@ int test_one_input(std::vector<uint8_t> buffer) {
     if (test_id >= TEST_ID_END) return 0;
 
     CDataStream ds(buffer, SER_NETWORK, INIT_PROTO_VERSION);
-    try {
+    try
+    {
         int nVersion;
         ds >> nVersion;
         ds.SetVersion(nVersion);
-    } catch (const std::ios_base::failure& e) {
+    } catch (const std::ios_base::failure &e)
+    {
         return 0;
     }
 
-    switch(test_id) {
+    switch (test_id)
+    {
         case CBLOCK_DESERIALIZE:
         {
             try
             {
                 CBlock block;
                 ds >> block;
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CTRANSACTION_DESERIALIZE:
@@ -94,7 +102,8 @@ int test_one_input(std::vector<uint8_t> buffer) {
             try
             {
                 CTransaction tx(deserialize, ds);
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CBLOCKLOCATOR_DESERIALIZE:
@@ -103,7 +112,8 @@ int test_one_input(std::vector<uint8_t> buffer) {
             {
                 CBlockLocator bl;
                 ds >> bl;
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CBLOCKMERKLEROOT:
@@ -114,7 +124,8 @@ int test_one_input(std::vector<uint8_t> buffer) {
                 ds >> block;
                 bool mutated;
                 BlockMerkleRoot(block, &mutated);
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CADDRMAN_DESERIALIZE:
@@ -123,7 +134,8 @@ int test_one_input(std::vector<uint8_t> buffer) {
             {
                 CAddrMan am;
                 ds >> am;
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CBLOCKHEADER_DESERIALIZE:
@@ -132,7 +144,8 @@ int test_one_input(std::vector<uint8_t> buffer) {
             {
                 CBlockHeader bh;
                 ds >> bh;
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CBANENTRY_DESERIALIZE:
@@ -141,7 +154,8 @@ int test_one_input(std::vector<uint8_t> buffer) {
             {
                 CBanEntry be;
                 ds >> be;
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CTXUNDO_DESERIALIZE:
@@ -150,7 +164,8 @@ int test_one_input(std::vector<uint8_t> buffer) {
             {
                 CTxUndo tu;
                 ds >> tu;
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CBLOCKUNDO_DESERIALIZE:
@@ -159,7 +174,8 @@ int test_one_input(std::vector<uint8_t> buffer) {
             {
                 CBlockUndo bu;
                 ds >> bu;
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CCOINS_DESERIALIZE:
@@ -168,7 +184,8 @@ int test_one_input(std::vector<uint8_t> buffer) {
             {
                 Coin coin;
                 ds >> coin;
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CNETADDR_DESERIALIZE:
@@ -177,7 +194,8 @@ int test_one_input(std::vector<uint8_t> buffer) {
             {
                 CNetAddr na;
                 ds >> na;
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CSERVICE_DESERIALIZE:
@@ -186,7 +204,8 @@ int test_one_input(std::vector<uint8_t> buffer) {
             {
                 CService s;
                 ds >> s;
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CMESSAGEHEADER_DESERIALIZE:
@@ -196,8 +215,10 @@ int test_one_input(std::vector<uint8_t> buffer) {
             {
                 CMessageHeader mh(pchMessageStart);
                 ds >> mh;
-                if (!mh.IsValid(pchMessageStart)) {return 0;}
-            } catch (const std::ios_base::failure& e) {return 0;}
+                if (!mh.IsValid(pchMessageStart))
+                { return 0; }
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CADDRESS_DESERIALIZE:
@@ -206,7 +227,8 @@ int test_one_input(std::vector<uint8_t> buffer) {
             {
                 CAddress a;
                 ds >> a;
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CINV_DESERIALIZE:
@@ -215,7 +237,8 @@ int test_one_input(std::vector<uint8_t> buffer) {
             {
                 CInv i;
                 ds >> i;
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CBLOOMFILTER_DESERIALIZE:
@@ -224,7 +247,8 @@ int test_one_input(std::vector<uint8_t> buffer) {
             {
                 CBloomFilter bf;
                 ds >> bf;
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CDISKBLOCKINDEX_DESERIALIZE:
@@ -233,7 +257,8 @@ int test_one_input(std::vector<uint8_t> buffer) {
             {
                 CDiskBlockIndex dbi;
                 ds >> dbi;
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
             break;
         }
         case CTXOUTCOMPRESSOR_DESERIALIZE:
@@ -243,7 +268,8 @@ int test_one_input(std::vector<uint8_t> buffer) {
             try
             {
                 ds >> toc;
-            } catch (const std::ios_base::failure& e) {return 0;}
+            } catch (const std::ios_base::failure &e)
+            { return 0; }
 
             break;
         }
@@ -254,24 +280,29 @@ int test_one_input(std::vector<uint8_t> buffer) {
 }
 
 static std::unique_ptr<ECCVerifyHandle> globalVerifyHandle;
-void initialize() {
+
+void initialize()
+{
     globalVerifyHandle = std::unique_ptr<ECCVerifyHandle>(new ECCVerifyHandle());
 }
 
 // This function is used by libFuzzer
-extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
+{
     test_one_input(std::vector<uint8_t>(data, data + size));
     return 0;
 }
 
 // This function is used by libFuzzer
-extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv) {
+extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
+{
     initialize();
     return 0;
 }
 
 // Disabled under WIN32 due to clash with Cygwin's WinMain.
 #ifndef WIN32
+
 // Declare main(...) "weak" to allow for libFuzzer linking. libFuzzer provides
 // the main(...) function.
 __attribute__((weak))
@@ -299,7 +330,8 @@ int main(int argc, char **argv)
     return ret;
 #else
     std::vector<uint8_t> buffer;
-    if (!read_stdin(buffer)) {
+    if (!read_stdin(buffer))
+    {
         return 0;
     }
     return test_one_input(buffer);
