@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <utilstrencodings.h>
+#include "algo/hashx21s.h"
 
 int main(int argc, char **argv)
 {
