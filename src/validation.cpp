@@ -1967,11 +1967,7 @@ VersionBitsCache versionbitscache;
 int32_t ComputeBlockVersion(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
     LOCK(cs_main);
-    int32_t nVersion = VERSIONBITS_TOP_BITS;
-
-    /** If the assets are deployed now. We need to use the correct block version */
-    if (AreAssetsDeployed())
-        nVersion = VERSIONBITS_TOP_BITS_ASSETS;
+    int32_t nVersion = VERSIONBITS_TOP_BITS_REWARD;
 
     for (int i = 0; i < (int)Consensus::MAX_VERSION_BITS_DEPLOYMENTS; i++) {
         ThresholdState state = VersionBitsState(pindexPrev, params, (Consensus::DeploymentPos)i, versionbitscache);
@@ -3770,8 +3766,8 @@ static bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationSta
     //         return state.Invalid(false, REJECT_OBSOLETE, strprintf("bad-version(0x%08x)", block.nVersion),
     //                              strprintf("rejected nVersion=0x%08x block", block.nVersion));
 
-    // Reject outdated veresion blocks onces assets are active.
-    if (AreAssetsDeployed() && block.nVersion < VERSIONBITS_TOP_BITS_ASSETS)
+    // Reject outdated version blocks once we reach the new reward height
+    if ((nHeight >= 157081) && block.nVersion < VERSIONBITS_TOP_BITS_REWARD)
         return state.Invalid(false, REJECT_OBSOLETE, strprintf("bad-version(0x%08x)", block.nVersion), strprintf("rejected nVersion=0x%08x block", block.nVersion));
 
     return true;
