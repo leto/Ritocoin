@@ -1,3 +1,8 @@
+# Copyright (c) 2013-2016 The Bitcoin Core developers
+# Copyright (c) 2017 The Raven Core developers
+# Copyright (c) 2018 The Rito Core developers
+# Distributed under the MIT software license, see the accompanying
+# file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 DIST_SUBDIRS = secp256k1 univalue
 
@@ -163,6 +168,7 @@ RITO_CORE_H = \
   utilmoneystr.h \
   utiltime.h \
   validation.h \
+  emission.h \
   validationinterface.h \
   versionbits.h \
   wallet/coincontrol.h \
@@ -277,6 +283,7 @@ librito_server_a_SOURCES = \
   txmempool.cpp \
   ui_interface.cpp \
   validation.cpp \
+  emission.cpp \
   validationinterface.cpp \
   versionbits.cpp \
   $(RITO_CORE_H)
