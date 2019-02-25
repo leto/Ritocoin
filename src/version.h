@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2018 The Bitcoin Core developers
+// Copyright (c) 2012-2019 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -11,7 +11,7 @@
  * network protocol versioning
  */
 
-static const int PROTOCOL_VERSION = 70017;
+static const int PROTOCOL_VERSION = 70020;
 
 //! initial proto version, to be increased after version/verack negotiation
 static const int INIT_PROTO_VERSION = 209;
@@ -46,5 +46,8 @@ static const int INVALID_CB_NO_BAN_VERSION = 70015;
 
 //! assetdata network request is allowed for this version
 static const int ASSETDATA_VERSION = 70017;
+
+//! getassetdata reutrn asstnotfound, and assetdata doesn't have blockhash in the data
+static const int ASSETDATA_VERSION_UPDATED = 70020;
 
 #endif // RITO_VERSION_H

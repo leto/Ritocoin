@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2018 The Bitcoin Core developers
+# Copyright (c) 2018-2019 The Bitcoin Core developers
 # Copyright (c) 2017 The Raven Core developers
 # Copyright (c) 2018 The Rito Core developers
 # Distributed under the MIT software license, see the accompanying
@@ -39,6 +39,7 @@ class UniqueAssetTest(RitoTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 3
+        self.extra_args = [['-assetindex'], ['-assetindex'], ['-assetindex']]
 
     def activate_assets(self):
         self.log.info("Generating RITO for node[0] and activating assets...")
@@ -119,7 +120,7 @@ class UniqueAssetTest(RitoTestFramework):
 
         # invalidate
         n0.invalidateblock(block_hash)
-        assert_does_not_contain_key(root, n0.listmyassets())
+        assert(root in n0.listmyassets())
         assert_does_not_contain_key(asset_name, n0.listmyassets())
 
         # reconsider

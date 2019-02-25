@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2018 The Bitcoin Core developers
+// Copyright (c) 2011-2019 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -449,7 +449,8 @@ void OverviewPage::handleAssetClicked(const QModelIndex &index)
             issueUnique->setDisabled(false);
             reissue->setDisabled(true);
             CNewAsset asset;
-            if (passets && passets->GetAssetMetaDataIfExists(name.toStdString(), asset))
+            auto currentActiveAssetCache = GetCurrentAssetCache();
+            if (currentActiveAssetCache && currentActiveAssetCache->GetAssetMetaDataIfExists(name.toStdString(), asset))
                 if (asset.nReissuable)
                     reissue->setDisabled(false);
 

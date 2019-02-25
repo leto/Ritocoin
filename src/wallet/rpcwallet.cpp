@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2018 The Bitcoin Core developers
+// Copyright (c) 2014-2019 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -387,7 +387,7 @@ static void SendMoney(CWallet * const pwallet, const CTxDestination &address, CA
 
     // Check amount
     if (nValue <= 0)
-        throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid amount");
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid amount (2)");
 
     if (nValue > curBalance)
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Insufficient funds");

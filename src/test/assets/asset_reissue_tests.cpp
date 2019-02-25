@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c) 2018-2019 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -16,7 +16,7 @@
 #include <base58.h>
 #include <consensus/validation.h>
 #include <consensus/tx_verify.h>
-
+#include <validation.h>
 BOOST_FIXTURE_TEST_SUITE(asset_reissue_tests, BasicTestingSetup)
 
 
@@ -26,6 +26,8 @@ BOOST_FIXTURE_TEST_SUITE(asset_reissue_tests, BasicTestingSetup)
 
         SelectParams(CBaseChainParams::MAIN);
 
+        fAssetIndex = true; // We only cache if fAssetIndex is true
+        passets = new CAssetsCache();
         // Create assets cache
         CAssetsCache cache;
 
@@ -45,7 +47,6 @@ BOOST_FIXTURE_TEST_SUITE(asset_reissue_tests, BasicTestingSetup)
         // Check to see if the reissue changed the cache data correctly
         BOOST_CHECK_MESSAGE(cache.mapReissuedAssetData.count("RITOASSET"), "Map Reissued Asset should contain the asset \"RITOASSET\"");
         BOOST_CHECK_MESSAGE(cache.mapAssetsAddressAmount.at(make_pair("RITOASSET", Params().GlobalBurnAddress())) == CAmount(101 * COIN), "Reissued amount wasn't added to the previous total");
-        BOOST_CHECK_MESSAGE(cache.mapAssetsAddresses.at("RITOASSET").count(Params().GlobalBurnAddress()), "Reissued address wasn't in the map");
 
         // Get the new asset data from the cache
         CNewAsset asset2;

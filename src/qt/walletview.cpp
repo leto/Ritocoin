@@ -1,4 +1,4 @@
-// Copyright (c) 2013-2018 The Bitcoin Core developers
+// Copyright (c) 2013-2019 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -397,9 +397,14 @@ void WalletView::requestedSyncWarningInfo()
     Q_EMIT outOfSyncWarningClicked();
 }
 
+bool fFirstVisit = true;
 /** RITO START */
 void WalletView::gotoAssetsPage()
 {
+    if (fFirstVisit){
+        fFirstVisit = false;
+        assetsPage->handleFirstSelection();
+    }
     setCurrentWidget(assetsPage);
     assetsPage->focusAssetListBox();
 }

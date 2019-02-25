@@ -675,41 +675,6 @@ void RitoGUI::createToolBars()
         currentMarketFont.setLetterSpacing(QFont::SpacingType::AbsoluteSpacing, -0.6);
         currentMarketFont.setPixelSize(18);
 
-        // Set the pricing information
-/*
-        QHBoxLayout* priceLayout = new QHBoxLayout(headerWidget);
-        priceLayout->setContentsMargins(QMargins());
-        priceLayout->setDirection(QBoxLayout::LeftToRight);
-        priceLayout->setAlignment(Qt::AlignVCenter);
-        labelCurrentMarket->setContentsMargins(50,0,0,0);
-        labelCurrentMarket->setFixedHeight(75);
-        labelCurrentMarket->setAlignment(Qt::AlignVCenter);
-        labelCurrentMarket->setStyleSheet(STRING_LABEL_COLOR);
-        labelCurrentMarket->setFont(currentMarketFont);
-        labelCurrentMarket->setText(tr("Ritocoin Market Price"));
-
-        QString currentPriceStyleSheet = ".QLabel{color: %1;}";
-        labelCurrentPrice->setContentsMargins(25,0,0,0);
-        labelCurrentPrice->setFixedHeight(75);
-        labelCurrentPrice->setAlignment(Qt::AlignVCenter);
-        labelCurrentPrice->setStyleSheet(currentPriceStyleSheet.arg(COLOR_LABELS.name()));
-        labelCurrentPrice->setFont(currentMarketFont);
-
-        QLabel* labelBtcRvn = new QLabel();
-        labelBtcRvn->setText("BTC / RITO");
-        labelBtcRvn->setContentsMargins(15,0,0,0);
-        labelBtcRvn->setFixedHeight(75);
-        labelBtcRvn->setAlignment(Qt::AlignVCenter);
-        labelBtcRvn->setStyleSheet(STRING_LABEL_COLOR);
-        labelBtcRvn->setFont(currentMarketFont);
-
-        priceLayout->setGeometry(headerWidget->rect());
-        priceLayout->addWidget(labelCurrentMarket, 0, Qt::AlignVCenter | Qt::AlignLeft);
-        priceLayout->addWidget(labelCurrentPrice, 0,  Qt::AlignVCenter | Qt::AlignLeft);
-        priceLayout->addWidget(labelBtcRvn, 0 , Qt::AlignVCenter | Qt::AlignLeft);
-        priceLayout->addStretch();
-*/
-
         // Create the layout for widget to the right of the tool bar
         QVBoxLayout* mainFrameLayout = new QVBoxLayout(mainWalletWidget);
         mainFrameLayout->addWidget(headerWidget);
@@ -727,58 +692,6 @@ void RitoGUI::createToolBars()
         containerWidget->setLayout(layout);
         setCentralWidget(containerWidget);
 
-        // Network request code for the header widget
-/*
-        QObject::connect(networkManager, &QNetworkAccessManager::finished,
-                         this, [=](QNetworkReply *reply) {
-                    if (reply->error()) {
-                        labelCurrentPrice->setText("");
-                        qDebug() << reply->errorString();
-                        return;
-                    }
-                    // Get the data from the network request
-                    QString answer = reply->readAll();
-
-                    // Create regex expression to find the value with 8 decimals
-                    QRegExp rx("\\d*.\\d\\d\\d\\d\\d\\d\\d\\d");
-                    rx.indexIn(answer);
-
-                    // List the found values
-                    QStringList list = rx.capturedTexts();
-
-                    QString currentPriceStyleSheet = ".QLabel{color: %1;}";
-                    // Evaluate the current and next numbers and assign a color (green for positive, red for negative)
-                    bool ok;
-                    if (!list.isEmpty()) {
-                        double next = list.first().toDouble(&ok);
-                        if (!ok) {
-                            labelCurrentPrice->setStyleSheet(currentPriceStyleSheet.arg(COLOR_LABELS.name()));
-                            labelCurrentPrice->setText("");
-                        } else {
-                            double current = labelCurrentPrice->text().toDouble(&ok);
-                            if (!ok) {
-                                current = 0.00000000;
-                            } else {
-                                if (next < current)
-                                    labelCurrentPrice->setStyleSheet(currentPriceStyleSheet.arg("red"));
-                                else if (next > current)
-                                    labelCurrentPrice->setStyleSheet(currentPriceStyleSheet.arg("green"));
-                                else
-                                    labelCurrentPrice->setStyleSheet(currentPriceStyleSheet.arg(COLOR_LABELS.name()));
-                            }
-                            labelCurrentPrice->setText(QString("%1").arg(QString().setNum(next, 'f', 8)));
-                            labelCurrentPrice->setToolTip(tr("Brought to you by binance.com"));
-                        }
-                    }
-                }
-        );
-
-        // Create the timer
-        connect(pricingTimer, SIGNAL(timeout()), this, SLOT(getPriceInfo()));
-        pricingTimer->start(10000);
-        getPriceInfo();
-        // RITO END 
-        */
     }
 }
 

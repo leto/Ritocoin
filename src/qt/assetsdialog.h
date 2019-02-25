@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c) 2018-2019 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -51,6 +51,10 @@ public:
     bool handlePaymentRequest(const SendAssetsRecipient &recipient);
     void processNewTransaction();
 
+    // The first time the transfer asset screen is loaded, the wallet isn't doing loading so the asset list is empty.
+    // The first time the screen is navigated to, refresh the asset list
+    void handleFirstSelection();
+
 public Q_SLOTS:
     void clear();
     void reject();
@@ -77,6 +81,8 @@ private:
     void updateFeeMinimizedLabel();
     // Update the passed in CCoinControl with state from the GUI
     void updateAssetControlState(CCoinControl& ctrl);
+
+
 
 private Q_SLOTS:
     void on_sendButton_clicked();

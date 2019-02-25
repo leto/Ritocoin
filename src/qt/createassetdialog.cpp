@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c) 2018-2019 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -536,9 +536,10 @@ void CreateAssetDialog::checkAvailabilityClicked()
     QString name = GetAssetName();
 
     LOCK(cs_main);
-    if (passets) {
+    auto currentActiveAssetCache = GetCurrentAssetCache();
+    if (currentActiveAssetCache) {
         CNewAsset asset;
-        if (passets->GetAssetMetaDataIfExists(name.toStdString(), asset)) {
+        if (currentActiveAssetCache->GetAssetMetaDataIfExists(name.toStdString(), asset)) {
             ui->nameText->setStyleSheet(STYLE_INVALID);
             showMessage(tr("Invalid: Asset name already in use"));
             disableCreateButton();

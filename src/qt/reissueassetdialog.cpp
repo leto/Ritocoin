@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c) 2018-2019 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -575,8 +575,9 @@ void ReissueAssetDialog::onAssetSelected(int index)
         QString qstr_name = ui->comboBox->currentText();
 
         LOCK(cs_main);
+        auto currentActiveAssetCache = GetCurrentAssetCache();
         // Get the asset data
-        if (!passets->GetAssetMetaDataIfExists(qstr_name.toStdString(), *asset)) {
+        if (!currentActiveAssetCache->GetAssetMetaDataIfExists(qstr_name.toStdString(), *asset)) {
             CheckFormState();
             disableAll();
             asset->SetNull();

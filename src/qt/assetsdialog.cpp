@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c) 2018-2019 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -497,8 +497,6 @@ SendAssetsEntry *AssetsDialog::addEntry()
     std::vector<std::string> assets;
     if (model)
         GetAllMyAssets(model->getWallet(), assets, 0);
-    else // If the model isn't present. Grab the list of assets that the cache thinks you own
-        GetAllMyAssetsFromCache(assets);
 
     QStringList list;
     bool fIsOwner = false;
@@ -1031,6 +1029,7 @@ void AssetsDialog::focusAsset(const QModelIndex &idx)
 
 void AssetsDialog::focusAssetListBox()
 {
+
     SendAssetsEntry *entry = qobject_cast<SendAssetsEntry*>(ui->entries->itemAt(0)->widget());
     if (entry)
     {
@@ -1038,6 +1037,15 @@ void AssetsDialog::focusAssetListBox()
 
         if (entry->getValue().assetName != "")
             entry->setFocus();
+
+    }
+}
+
+void AssetsDialog::handleFirstSelection()
+{
+    SendAssetsEntry *entry = qobject_cast<SendAssetsEntry*>(ui->entries->itemAt(0)->widget());
+    if (entry) {
+        entry->refreshAssetList();
     }
 }
 /** RITO END */

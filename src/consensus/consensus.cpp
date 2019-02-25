@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c) 2018-2019 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -9,10 +9,22 @@
 
 unsigned int GetMaxBlockWeight()
 {
-  return MAX_BLOCK_WEIGHT_RIP2;
+    // Now that Assets have gone live, we should make checks against the new larger block size only
+    // This is necessary because when the chain loads, it can fail certain blocks(that are valid) when
+    // The asset active state isn't set like during a reindex
+    return MAX_BLOCK_WEIGHT_RIP2;
+
+    // Old block weight for when assets weren't activated
+//    return MAX_BLOCK_WEIGHT;
 }
 
 unsigned int GetMaxBlockSerializedSize()
 {
-  return MAX_BLOCK_SERIALIZED_SIZE_RIP2;
+    // Now that Assets have gone live, we should make checks against the new larger block size only
+    // This is necessary because when the chain loads, it can fail certain blocks(that are valid) when
+    // The asset active state isn't set like during a reindex
+    return MAX_BLOCK_SERIALIZED_SIZE_RIP2;
+
+    // Old block serialized size for when assets weren't activated
+//    return MAX_BLOCK_SERIALIZED_SIZE;
 }

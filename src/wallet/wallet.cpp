@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2018 The Bitcoin Core developers
+// Copyright (c) 2014-2019 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -2749,8 +2749,8 @@ bool CWallet::SelectCoins(const std::vector<COutput>& vAvailableCoins, const CAm
                 return false;
             nValueFromPresetInputs += pcoin->tx->vout[outpoint.n].nValue;
             setPresetCoins.insert(CInputCoin(pcoin, outpoint.n));
-        } else
-            return false; // TODO: Allow non-wallet inputs
+        }
+        // Allow non-wallet inputs
     }
 
     // remove preset inputs from vCoins

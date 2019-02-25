@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The Bitcoin Core developers
+// Copyright (c) 2018-2019 The Bitcoin Core developers
 // Copyright (c) 2017 The Raven Core developers
 // Copyright (c) 2018 The Rito Core developers
 // Distributed under the MIT software license, see the accompanying
@@ -327,10 +327,11 @@ void SendAssetsEntry::onAssetSelected(int index)
     }
 
     LOCK(cs_main);
+    auto currentActiveAssetCache = GetCurrentAssetCache();
     CNewAsset asset;
 
     // Get the asset metadata if it exists. This isn't called on the administrator token because that doesn't have metadata
-    if (!passets->GetAssetMetaDataIfExists(name.toStdString(), asset)) {
+    if (!currentActiveAssetCache->GetAssetMetaDataIfExists(name.toStdString(), asset)) {
         // This should only happen if the user, selected an asset that was issued from assetcontrol and tries to transfer it before it is mined.
         clear();
         ui->messageLabel->show();
