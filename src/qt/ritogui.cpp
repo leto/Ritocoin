@@ -692,6 +692,7 @@ void RitoGUI::createToolBars()
         containerWidget->setLayout(layout);
         setCentralWidget(containerWidget);
 
+        /** RITO END */
     }
 }
 

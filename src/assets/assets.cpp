@@ -2866,7 +2866,7 @@ bool VerifyWalletHasAsset(const std::string& asset_name, std::pair<int, std::str
 }
 
 // Return true if the amount is valid with the units passed in
-bool CheckAmountWithUnits(const CAmount& nAmount, const uint8_t nUnits)
+bool CheckAmountWithUnits(const CAmount& nAmount, const int8_t nUnits)
 {
     return nAmount % int64_t(pow(10, (MAX_UNIT - nUnits))) == 0;
 }

@@ -288,7 +288,7 @@ bool CheckTransferOwnerTx(const CTxOut& txOut);
 
 bool CheckEncodedIPFS(const std::string& hash, std::string& strError);
 
-bool CheckAmountWithUnits(const CAmount& nAmount, const uint8_t nUnits);
+bool CheckAmountWithUnits(const CAmount& nAmount, const int8_t nUnits);
 
 bool IsScriptNewAsset(const CScript& scriptPubKey, int& nStartingIndex);
 bool IsScriptNewUniqueAsset(const CScript& scriptPubKey, int& nStartingIndex);
