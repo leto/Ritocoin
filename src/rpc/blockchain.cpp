@@ -40,6 +40,7 @@
 
 #include <mutex>
 #include <condition_variable>
+#include "komodo_rpcblockchain.h"
 
 struct CUpdatedBlock
 {
